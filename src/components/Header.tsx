@@ -11,9 +11,6 @@ export function Header({ email }: { email?: string | null }) {
           <Link href="/catalogo" className="hover:text-zinc-900">
             Catálogo
           </Link>
-          <Link href="/minhas-fotos" className="hover:text-zinc-900">
-            Minhas fotos
-          </Link>
           {email && <span className="text-zinc-400">{email}</span>}
         </nav>
       </div>

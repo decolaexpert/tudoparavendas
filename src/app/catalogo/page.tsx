@@ -99,7 +99,7 @@ export default async function CatalogoPage({
             {rows.map((r) => (
               <Link
                 key={r.id}
-                href={`/gerar/${r.id}`}
+                href={`/prompt/${r.id}`}
                 className="group overflow-hidden rounded-xl border border-zinc-200 bg-white transition hover:shadow-md"
               >
                 <div className="relative aspect-square w-full bg-zinc-100">

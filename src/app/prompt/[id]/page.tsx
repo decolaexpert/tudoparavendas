@@ -4,7 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getCurrentMember, hasActiveAccess } from "@/lib/member";
 import { Header } from "@/components/Header";
 import { NoAccess } from "@/components/NoAccess";
-import { GenerateForm } from "@/components/GenerateForm";
+import { CopyPromptCard } from "@/components/CopyPromptCard";
 
 const PLACEHOLDER_THUMB = "/placeholder-reference.svg";
 
@@ -57,7 +57,7 @@ export default async function GerarPage({
             </p>
           </div>
 
-          <GenerateForm referenceId={reference.id} />
+          <CopyPromptCard prompt={reference.prompt_mestre} />
         </div>
       </main>
     </>

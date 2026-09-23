@@ -29,19 +29,6 @@ export type ReferencePhoto = {
   created_at: string;
 };
 
-export type GenerationStatus = "pending" | "done" | "failed";
-
-export type Generation = {
-  id: string;
-  member_id: string;
-  reference_photo_id: string;
-  input_image_url: string;
-  output_image_url: string | null;
-  status: GenerationStatus;
-  error_message: string | null;
-  created_at: string;
-};
-
 export type Database = {
   public: {
     Tables: {
@@ -62,24 +49,6 @@ export type Database = {
         };
         Update: Partial<ReferencePhoto>;
         Relationships: [];
-      };
-      generations: {
-        Row: Generation;
-        Insert: Partial<Generation> & {
-          member_id: string;
-          reference_photo_id: string;
-          input_image_url: string;
-        };
-        Update: Partial<Generation>;
-        Relationships: [
-          {
-            foreignKeyName: "generations_reference_photo_id_fkey";
-            columns: ["reference_photo_id"];
-            isOneToOne: false;
-            referencedRelation: "reference_photos";
-            referencedColumns: ["id"];
-          },
-        ];
       };
     };
     Views: Record<string, never>;
