@@ -107,7 +107,7 @@ export default async function CatalogoPage({
           Array.from(grupos.entries()).map(([tipoPeca, itens]) => (
             <section key={tipoPeca} className="mt-12">
               <SectionDivider label={tipoPeca} />
-              <div className="mt-6 grid grid-cols-[repeat(auto-fill,315px)] justify-center gap-5">
+              <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5">
                 {itens.map((r) => (
                   <ReferenceCard key={r.id} reference={r} />
                 ))}
