@@ -145,7 +145,7 @@ function ReferenceCard({ reference: r }: { reference: ReferencePhoto }) {
           className="object-cover transition-transform duration-300 ease-out group-hover:scale-105"
         />
       </div>
-      <div className="bg-brand-blue px-3 py-2.5 text-center">
+      <div className="flex min-h-[72px] flex-col justify-center bg-brand-blue px-3 py-2.5 text-center">
         <p className="text-xs font-bold tracking-wide text-white uppercase">
           {r.pose}
           {r.data_comemorativa ? ` · ${r.data_comemorativa}` : ""}
