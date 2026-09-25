@@ -39,7 +39,7 @@ export default async function GerarPage({
   return (
     <>
       <Header email={email} />
-      <main className="mx-auto max-w-4xl px-4 py-8">
+      <main className="mx-auto w-full max-w-4xl px-4 py-8">
         <div className="grid gap-8 sm:grid-cols-2">
           <div>
             <div className="relative aspect-square w-full overflow-hidden rounded-xl bg-zinc-100">

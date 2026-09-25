@@ -63,7 +63,7 @@ export default async function CatalogoPage({
   return (
     <>
       <Header email={email} />
-      <main className="mx-auto max-w-[1400px] px-4 py-8">
+      <main className="mx-auto w-full max-w-[1400px] px-4 py-8">
         <h1 className="text-2xl font-semibold text-brand-black">Catálogo de estilos</h1>
         <p className="mt-1 text-sm text-zinc-500">
           Escolha o estilo de foto e copie o prompt na próxima etapa.
