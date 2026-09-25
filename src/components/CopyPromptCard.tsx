@@ -33,7 +33,7 @@ export function CopyPromptCard({ prompt }: { prompt: string }) {
 
       <button
         onClick={handleCopy}
-        className="rounded-lg bg-zinc-900 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-zinc-700"
+        className="rounded-lg bg-brand-black px-4 py-2.5 text-sm font-medium text-white transition hover:bg-brand-blue"
       >
         {copied ? "Prompt copiado! ✓" : "Copiar prompt"}
       </button>
@@ -53,7 +53,7 @@ export function CopyPromptCard({ prompt }: { prompt: string }) {
             href={GEMINI_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="rounded-lg border border-zinc-300 bg-white px-3 py-2 text-xs font-medium text-zinc-700 hover:bg-zinc-100"
+            className="rounded-lg border border-brand-blue px-3 py-2 text-xs font-medium text-brand-blue hover:bg-brand-blue hover:text-white"
           >
             Abrir Gemini ↗
           </a>
@@ -61,7 +61,7 @@ export function CopyPromptCard({ prompt }: { prompt: string }) {
             href={CHATGPT_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="rounded-lg border border-zinc-300 bg-white px-3 py-2 text-xs font-medium text-zinc-700 hover:bg-zinc-100"
+            className="rounded-lg border border-brand-blue px-3 py-2 text-xs font-medium text-brand-blue hover:bg-brand-blue hover:text-white"
           >
             Abrir ChatGPT ↗
           </a>

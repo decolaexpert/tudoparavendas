@@ -1,14 +1,18 @@
 import Link from "next/link";
+import Image from "next/image";
 
 export function Header({ email }: { email?: string | null }) {
   return (
     <header className="border-b border-zinc-200 bg-white">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
-        <Link href="/catalogo" className="text-lg font-semibold tracking-tight text-zinc-900">
-          Photo Studio <span className="text-zinc-400">TPV</span>
+        <Link href="/catalogo" className="flex items-center gap-2">
+          <Image src="/logo.webp" alt="Tudo para Vendas" width={140} height={25} priority />
+          <span className="hidden text-sm font-semibold tracking-wide text-brand-black sm:inline">
+            Photo Studio
+          </span>
         </Link>
         <nav className="flex items-center gap-6 text-sm text-zinc-600">
-          <Link href="/catalogo" className="hover:text-zinc-900">
+          <Link href="/catalogo" className="hover:text-brand-blue">
             Catálogo
           </Link>
           {email && <span className="text-zinc-400">{email}</span>}

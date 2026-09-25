@@ -53,13 +53,20 @@ export default async function CatalogoPage({
     new Set((filtrosData ?? []).map((r) => r.data_comemorativa).filter(Boolean)),
   ).sort() as string[];
 
+  const grupos = new Map<string, ReferencePhoto[]>();
+  for (const r of rows) {
+    const grupo = grupos.get(r.tipo_peca) ?? [];
+    grupo.push(r);
+    grupos.set(r.tipo_peca, grupo);
+  }
+
   return (
     <>
       <Header email={email} />
       <main className="mx-auto max-w-6xl px-4 py-8">
-        <h1 className="text-2xl font-semibold text-zinc-900">Catálogo de estilos</h1>
+        <h1 className="text-2xl font-semibold text-brand-black">Catálogo de estilos</h1>
         <p className="mt-1 text-sm text-zinc-500">
-          Escolha o estilo de foto e envie a foto da sua peça real na próxima etapa.
+          Escolha o estilo de foto e copie o prompt na próxima etapa.
         </p>
 
         <div className="mt-6 flex flex-wrap gap-2">
@@ -95,34 +102,55 @@ export default async function CatalogoPage({
             fotos-mestre no painel de conteúdo, elas aparecem aqui.
           </p>
         ) : (
-          <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
-            {rows.map((r) => (
-              <Link
-                key={r.id}
-                href={`/prompt/${r.id}`}
-                className="group overflow-hidden rounded-xl border border-zinc-200 bg-white transition hover:shadow-md"
-              >
-                <div className="relative aspect-square w-full bg-zinc-100">
-                  <Image
-                    src={r.thumbnail_url || PLACEHOLDER_THUMB}
-                    alt={r.nome_referencia}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <div className="p-3">
-                  <p className="text-sm font-medium text-zinc-900">{r.tipo_peca}</p>
-                  <p className="text-xs text-zinc-500">
-                    {r.pose}
-                    {r.data_comemorativa ? ` · ${r.data_comemorativa}` : ""}
-                  </p>
-                </div>
-              </Link>
-            ))}
-          </div>
+          Array.from(grupos.entries()).map(([tipoPeca, itens]) => (
+            <section key={tipoPeca} className="mt-12">
+              <SectionDivider label={tipoPeca} />
+              <div className="mt-6 grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4">
+                {itens.map((r) => (
+                  <ReferenceCard key={r.id} reference={r} />
+                ))}
+              </div>
+            </section>
+          ))
         )}
       </main>
     </>
+  );
+}
+
+function SectionDivider({ label }: { label: string }) {
+  return (
+    <div className="relative flex items-center justify-center">
+      <div className="absolute inset-x-0 top-1/2 h-px bg-zinc-200" />
+      <span className="relative bg-white px-4 text-sm font-bold tracking-[0.2em] text-brand-black uppercase">
+        {label}
+      </span>
+    </div>
+  );
+}
+
+function ReferenceCard({ reference: r }: { reference: ReferencePhoto }) {
+  return (
+    <Link
+      href={`/prompt/${r.id}`}
+      className="group block overflow-hidden rounded-xl border border-zinc-200 bg-white transition hover:shadow-lg"
+    >
+      <div className="relative aspect-[4/5] w-full overflow-hidden bg-zinc-100">
+        <Image
+          src={r.thumbnail_url || PLACEHOLDER_THUMB}
+          alt={r.nome_referencia}
+          fill
+          className="object-cover transition-transform duration-300 ease-out group-hover:scale-105"
+        />
+      </div>
+      <div className="bg-brand-black px-3 py-2.5 text-center">
+        <p className="text-xs font-bold tracking-wide text-white uppercase">
+          {r.pose}
+          {r.data_comemorativa ? ` · ${r.data_comemorativa}` : ""}
+        </p>
+        <p className="mt-0.5 text-[11px] text-brand-blue">Clique e copie o prompt</p>
+      </div>
+    </Link>
   );
 }
 
@@ -143,7 +171,7 @@ function FilterLink({
       className={[
         "rounded-full px-3 py-1.5 text-xs font-medium transition",
         active
-          ? "bg-zinc-900 text-white"
+          ? "bg-brand-blue text-white"
           : subtle
             ? "bg-white text-zinc-500 ring-1 ring-zinc-200 hover:bg-zinc-50"
             : "bg-zinc-100 text-zinc-700 hover:bg-zinc-200",
