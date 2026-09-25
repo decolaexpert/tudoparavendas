@@ -63,7 +63,7 @@ export default async function CatalogoPage({
   return (
     <>
       <Header email={email} />
-      <main className="mx-auto max-w-6xl px-4 py-8">
+      <main className="mx-auto max-w-[1400px] px-4 py-8">
         <h1 className="text-2xl font-semibold text-brand-black">Catálogo de estilos</h1>
         <p className="mt-1 text-sm text-zinc-500">
           Escolha o estilo de foto e copie o prompt na próxima etapa.
@@ -105,7 +105,7 @@ export default async function CatalogoPage({
           Array.from(grupos.entries()).map(([tipoPeca, itens]) => (
             <section key={tipoPeca} className="mt-12">
               <SectionDivider label={tipoPeca} />
-              <div className="mt-6 grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4">
+              <div className="mt-6 grid grid-cols-[repeat(auto-fill,315px)] justify-center gap-5">
                 {itens.map((r) => (
                   <ReferenceCard key={r.id} reference={r} />
                 ))}
@@ -143,12 +143,12 @@ function ReferenceCard({ reference: r }: { reference: ReferencePhoto }) {
           className="object-cover transition-transform duration-300 ease-out group-hover:scale-105"
         />
       </div>
-      <div className="bg-brand-black px-3 py-2.5 text-center">
+      <div className="bg-brand-blue px-3 py-2.5 text-center">
         <p className="text-xs font-bold tracking-wide text-white uppercase">
           {r.pose}
           {r.data_comemorativa ? ` · ${r.data_comemorativa}` : ""}
         </p>
-        <p className="mt-0.5 text-[11px] text-brand-blue">Clique e copie o prompt</p>
+        <p className="mt-0.5 text-[11px] text-white/85">Clique para gerar sua foto</p>
       </div>
     </Link>
   );
