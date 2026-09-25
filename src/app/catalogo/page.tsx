@@ -40,13 +40,11 @@ export default async function CatalogoPage({
   if (tipo) query = query.eq("tipo_peca", tipo);
   if (data) query = query.eq("data_comemorativa", data);
 
-  const { data: references } = await query;
+  const [{ data: references }, { data: filtrosData }] = await Promise.all([
+    query,
+    supabase.from("reference_photos").select("tipo_peca, data_comemorativa").eq("status", "aprovado"),
+  ]);
   const rows = (references ?? []) as ReferencePhoto[];
-
-  const { data: filtrosData } = await supabase
-    .from("reference_photos")
-    .select("tipo_peca, data_comemorativa")
-    .eq("status", "aprovado");
 
   const tipos = Array.from(new Set((filtrosData ?? []).map((r) => r.tipo_peca))).sort();
   const datas = Array.from(
@@ -142,6 +140,7 @@ function ReferenceCard({ reference: r }: { reference: ReferencePhoto }) {
           src={r.thumbnail_url || PLACEHOLDER_THUMB}
           alt={r.nome_referencia}
           fill
+          sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1280px) 25vw, 20vw"
           className="object-cover transition-transform duration-300 ease-out group-hover:scale-105"
         />
       </div>

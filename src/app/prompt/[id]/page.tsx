@@ -47,6 +47,7 @@ export default async function GerarPage({
                 src={reference.thumbnail_url || PLACEHOLDER_THUMB}
                 alt={reference.nome_referencia}
                 fill
+                sizes="(max-width: 640px) 100vw, 448px"
                 className="object-cover"
               />
             </div>
