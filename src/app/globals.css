@@ -13,6 +13,7 @@
   --color-brand-black: var(--brand-black);
   --color-brand-blue: var(--brand-blue);
   --font-sans: var(--font-montserrat);
+  --font-script: var(--font-dancing-script);
 }
 
 body {

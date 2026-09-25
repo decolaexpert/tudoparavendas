@@ -7,8 +7,8 @@ export function Header({ email }: { email?: string | null }) {
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
         <Link href="/catalogo" className="flex items-center gap-2">
           <Image src="/logo.webp" alt="Tudo para Vendas" width={140} height={25} priority />
-          <span className="hidden text-sm font-semibold tracking-wide text-brand-black sm:inline">
-            Photo Studio
+          <span className="hidden font-script text-2xl text-brand-black sm:inline">
+            Studio
           </span>
         </Link>
         <nav className="flex items-center gap-6 text-sm text-zinc-600">
