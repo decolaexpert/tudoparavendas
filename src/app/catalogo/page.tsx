@@ -133,7 +133,7 @@ function ReferenceCard({ reference: r }: { reference: ReferencePhoto }) {
   return (
     <Link
       href={`/prompt/${r.id}`}
-      className="group block overflow-hidden rounded-xl border border-zinc-200 bg-white transition hover:shadow-lg"
+      className="group block cursor-pointer overflow-hidden rounded-xl border border-zinc-200 bg-white transition hover:shadow-lg"
     >
       <div className="relative aspect-[4/5] w-full overflow-hidden bg-zinc-100">
         <Image
@@ -169,7 +169,7 @@ function FilterLink({
     <Link
       href={href}
       className={[
-        "rounded-full px-3 py-1.5 text-xs font-medium transition",
+        "cursor-pointer rounded-full px-3 py-1.5 text-xs font-medium transition",
         active
           ? "bg-brand-blue text-white"
           : subtle

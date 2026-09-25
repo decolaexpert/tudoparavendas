@@ -61,7 +61,7 @@ function LoginForm() {
             <button
               type="submit"
               disabled={status === "sending"}
-              className="rounded-lg bg-brand-black px-4 py-2.5 text-sm font-medium text-white transition hover:bg-brand-blue disabled:opacity-60"
+              className="cursor-pointer rounded-lg bg-brand-black px-4 py-2.5 text-sm font-medium text-white transition hover:bg-brand-blue disabled:cursor-default disabled:opacity-60"
             >
               {status === "sending" ? "Enviando..." : "Receber link de acesso"}
             </button>
