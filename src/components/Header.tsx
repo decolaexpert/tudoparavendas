@@ -4,7 +4,7 @@ import Image from "next/image";
 export function Header({ email }: { email?: string | null }) {
   return (
     <header className="border-b border-zinc-200 bg-white">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
+      <div className="mx-auto flex w-full max-w-[1400px] items-center justify-between px-4 py-4">
         <Link href="/catalogo" className="flex cursor-pointer items-center gap-2">
           <Image src="/logo.webp" alt="Tudo para Vendas" width={140} height={25} priority />
           <span className="hidden font-script text-2xl text-brand-black sm:inline">
