@@ -8,6 +8,14 @@ const nextConfig: NextConfig = {
         hostname: "*.supabase.co",
         pathname: "/storage/v1/object/public/**",
       },
+      {
+        protocol: "https",
+        hostname: "www.tudoparavendas.com.br",
+      },
+      {
+        protocol: "https",
+        hostname: "tudoparavendas.com.br",
+      },
     ],
   },
 };
