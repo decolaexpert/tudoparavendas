@@ -32,7 +32,14 @@ FIDELIDADE = (
     "foto anexada como referência de cenário, iluminação, enquadramento ou "
     "composição — ela serve apenas para identificar a peça e seus "
     "detalhes exatos; remova completamente quaisquer objetos, mãos ou "
-    "fundos presentes na foto original."
+    "fundos presentes na foto original. Atenção especial à espessura de "
+    "correntes, elos e fios: é um erro comum de IA generativa deixar "
+    "correntes finas e delicadas mais grossas, mais vistosas ou mais "
+    "robustas do que a peça real. A corrente gerada precisa ter "
+    "exatamente a mesma espessura, o mesmo diâmetro de elo e a mesma "
+    "delicadeza da foto original — NUNCA mais grossa, mais larga ou mais "
+    "chamativa do que o original, mesmo que isso a deixe visualmente mais "
+    "sutil ou difícil de perceber na imagem gerada."
 )
 
 FECHO_UNIVERSAL = (
