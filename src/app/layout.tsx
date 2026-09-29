@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Montserrat, Dancing_Script } from "next/font/google";
+import { BackToTopButton } from "@/components/BackToTopButton";
 import "./globals.css";
 
 const montserrat = Montserrat({
@@ -23,7 +24,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="pt-BR"
       className={`${montserrat.variable} ${dancingScript.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body id="topo" className="min-h-full flex flex-col">
+        {children}
+        <BackToTopButton />
+      </body>
     </html>
   );
 }
