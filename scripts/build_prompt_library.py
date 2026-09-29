@@ -23,14 +23,23 @@ ASPECTO_PADRAO = "3:4 (vertical)"
 
 FIDELIDADE = (
     "Utilize exclusivamente a joia da fotografia anexada como referência do "
-    "produto. Preserve com fidelidade absoluta: formato, proporções, "
-    "espessura, acabamento, brilho, textura, cor do metal, pedras (corte, "
-    "tamanho e posição), cravação, fechos e elos, e todos os demais "
-    "detalhes originais da peça. Não redesenhe, reinterprete, estilize, "
-    "complete, corrija ou invente nenhuma característica da joia — "
-    "reproduza exatamente o que existe na imagem original. Não utilize a "
-    "foto anexada como referência de cenário, iluminação, enquadramento ou "
-    "composição — ela serve apenas para identificar a peça e seus "
+    "produto. Antes de gerar, identifique exatamente quantas peças e "
+    "quantas unidades de cada peça existem na fotografia anexada (por "
+    "exemplo, um par de brincos conta como duas unidades) e reproduza "
+    "exatamente essa mesma quantidade na imagem final — nunca invente, "
+    "duplique, repita, clone, remova ou complete o conjunto adicionando "
+    "peças, pingentes, pedras ou componentes que não estejam fisicamente "
+    "presentes na foto original. Se a foto anexada não contiver "
+    "determinado tipo de peça (por exemplo, não houver anel), essa peça "
+    "não deve aparecer na imagem final sob nenhuma hipótese. Preserve com "
+    "fidelidade absoluta: formato, proporções, espessura, acabamento, "
+    "brilho, textura, cor do metal, pedras (corte, tamanho e posição), "
+    "cravação, fechos e elos, e todos os demais detalhes originais da "
+    "peça. Não redesenhe, reinterprete, estilize, complete, corrija ou "
+    "invente nenhuma característica da joia — reproduza exatamente o que "
+    "existe na imagem original. Não utilize a foto anexada como "
+    "referência de cenário, iluminação, enquadramento ou composição — ela "
+    "serve apenas para identificar a peça, sua quantidade exata e seus "
     "detalhes exatos; remova completamente quaisquer objetos, mãos ou "
     "fundos presentes na foto original. Atenção especial à espessura de "
     "correntes, elos e fios: é um erro comum de IA generativa deixar "
@@ -50,10 +59,54 @@ FECHO_UNIVERSAL = (
     "granulado, halos ou qualquer aspecto artificial típico de imagem "
     "gerada por IA. A peça não deve parecer flutuando, tombada ou fora de "
     "escala — preserve rigorosamente suas proporções e comportamento "
-    "físico real. Antes de finalizar, confirme que a peça gerada "
-    "corresponde exatamente, em quantidade e em detalhes, à peça da "
-    "imagem original. Formato final da imagem: {aspecto}."
+    "físico real.{anatomia} Antes de finalizar, confirme item por item: a "
+    "quantidade de peças geradas é idêntica à da foto original (nem a "
+    "mais, nem a menos); nenhuma peça, pingente ou pedra foi inventado, "
+    "duplicado ou removido; todos os detalhes de acabamento batem com o "
+    "original. Formato final da imagem: {aspecto}."
 )
+
+# Checagem de anatomia — usada apenas nas poses humanizadas/lifestyle,
+# onde partes do corpo (mão, dedos, pé) aparecem e são um ponto comum de
+# erro de anatomia em imagens geradas por IA.
+ANATOMIA_CHECK = {
+    "Brinco": (
+        " Garanta anatomia perfeita da orelha e do lóbulo — sem "
+        "deformações, sem uma segunda orelha ou rosto fantasma aparecendo "
+        "no enquadramento."
+    ),
+    "Anel": (
+        " Mostre exatamente uma mão, com exatamente cinco dedos "
+        "anatomicamente corretos — nunca dedos extras, dedos fundidos, "
+        "articulações deformadas ou uma segunda mão/braço aparecendo "
+        "parcialmente no enquadramento."
+    ),
+    "Aliança": (
+        " Mostre exatamente duas mãos entrelaçadas, cada uma com "
+        "exatamente cinco dedos anatomicamente corretos — nunca dedos "
+        "extras, fundidos ou deformados."
+    ),
+    "Pulseira": (
+        " Mostre exatamente um pulso e uma mão, com exatamente cinco "
+        "dedos anatomicamente corretos — nunca dedos extras, fundidos ou "
+        "uma segunda mão aparecendo no enquadramento."
+    ),
+    "Bracelete/Bangle": (
+        " Mostre exatamente um pulso e uma mão, com exatamente cinco "
+        "dedos anatomicamente corretos — nunca dedos extras, fundidos ou "
+        "uma segunda mão aparecendo no enquadramento."
+    ),
+    "Tornozeleira": (
+        " Mostre exatamente um tornozelo e um pé, com exatamente cinco "
+        "dedos anatomicamente corretos — nunca dedos extras ou "
+        "deformados."
+    ),
+    "Relógio": (
+        " Mostre exatamente um pulso e uma mão, com exatamente cinco "
+        "dedos anatomicamente corretos — nunca dedos extras, fundidos ou "
+        "uma segunda mão aparecendo no enquadramento."
+    ),
+}
 
 # ---------------------------------------------------------------------------
 # Física/composição por tipo de peça — usada nas poses "still" (sem modelo)
@@ -364,7 +417,7 @@ def montar_still(tipo, pose, textura_idx):
         tech = tech_still_sombra_editorial()
     else:  # Still em Superfície Texturizada
         tech = tech_still_textura(textura_idx)
-    fecho = FECHO_UNIVERSAL.format(aspecto=ASPECTO_PADRAO)
+    fecho = FECHO_UNIVERSAL.format(aspecto=ASPECTO_PADRAO, anatomia="")
     return "\n\n".join([FIDELIDADE, cena, tech, fecho])
 
 def montar_humanizado_ou_lifestyle(tipo, pose):
@@ -372,7 +425,7 @@ def montar_humanizado_ou_lifestyle(tipo, pose):
     cena = f"Composição: mostrar apenas {parte}, evidenciando a peça de forma natural."
     tech = tech_still_humanizado() if pose == "Still Humanizado" else tech_lifestyle()
     tech = tech.replace("[PARTE DO CORPO]", parte)
-    fecho = FECHO_UNIVERSAL.format(aspecto=ASPECTO_PADRAO)
+    fecho = FECHO_UNIVERSAL.format(aspecto=ASPECTO_PADRAO, anatomia=ANATOMIA_CHECK.get(tipo, ""))
     return "\n\n".join([FIDELIDADE, cena, tech, fecho])
 
 def montar_prompt_evergreen(tipo, pose, textura_idx):
@@ -385,6 +438,7 @@ def montar_prompt_data(tipo, pose, data, tema):
         f"Tema visual: {data}. Paleta de cores: {tema['paleta']}. "
         f"Elementos/props de cena: {tema['props']}. Clima geral: {tema['clima']}."
     )
+    anatomia = ""
     if pose == "Still com Tema":
         cena = f"Composição: {TIPO_COMPOSICAO_STILL[tipo]}"
         tech = tech_still_sombra_editorial()
@@ -392,7 +446,8 @@ def montar_prompt_data(tipo, pose, data, tema):
         parte = TIPO_PARTE_CORPO[tipo]
         cena = f"Composição: mostrar apenas {parte}, evidenciando a peça de forma natural."
         tech = tech_still_humanizado().replace("[PARTE DO CORPO]", parte)
-    fecho = FECHO_UNIVERSAL.format(aspecto=ASPECTO_PADRAO)
+        anatomia = ANATOMIA_CHECK.get(tipo, "")
+    fecho = FECHO_UNIVERSAL.format(aspecto=ASPECTO_PADRAO, anatomia=anatomia)
     return "\n\n".join([FIDELIDADE, cena, tema_txt, tech, fecho])
 
 rows_evergreen = []
