@@ -8,6 +8,24 @@ import type { ReferencePhoto } from "@/lib/types";
 
 const PLACEHOLDER_THUMB = "/placeholder-reference.svg";
 
+const PASSOS = [
+  {
+    numero: "1",
+    titulo: "Escolha uma foto",
+    descricao: "Navegue pelo catálogo e clique na referência que combina com a sua peça.",
+  },
+  {
+    numero: "2",
+    titulo: "Cole no ChatGPT ou Gemini",
+    descricao: "Copie o prompt e cole junto com a foto original da sua joia.",
+  },
+  {
+    numero: "3",
+    titulo: "Baixe sua foto pronta",
+    descricao: "A IA gera a imagem profissional em segundos, sem alterar a peça.",
+  },
+];
+
 export default async function CatalogoPage({
   searchParams,
 }: {
@@ -61,18 +79,45 @@ export default async function CatalogoPage({
   return (
     <>
       <Header email={email} />
-      <main className="mx-auto w-full max-w-[1400px] px-4 py-8">
-        <h1 className="text-2xl font-semibold text-brand-black">
-          Gere fotos irresistíveis com IA
-        </h1>
-        <p className="mt-1 text-sm text-zinc-500">
-          Escolha a referência e clique para copiar o prompt.
-        </p>
 
-        <div className="mt-6 flex flex-wrap gap-2">
-          <FilterLink label="Todos os tipos" active={!tipo} href="/catalogo" />
+      <section className="bg-brand-navy">
+        <div className="mx-auto w-full max-w-[1400px] px-4 py-10 sm:py-14">
+          <p className="text-xs font-bold tracking-[0.3em] text-brand-gold uppercase">
+            Photo Studio TPV
+          </p>
+          <h1 className="mt-3 flex flex-wrap items-center gap-3 text-3xl font-semibold text-white sm:text-4xl">
+            Fotos profissionais para suas joias
+            <span aria-hidden className="text-brand-gold">
+              ✦
+            </span>
+          </h1>
+          <p className="mt-2 text-sm tracking-[0.15em] text-white/70 uppercase">
+            Prompts prontos para gerar fotos com IA
+          </p>
+
+          <div className="mt-8 grid gap-px overflow-hidden rounded-2xl border border-white/10 bg-white/10 sm:grid-cols-3">
+            {PASSOS.map((passo) => (
+              <div key={passo.numero} className="flex items-start gap-3 bg-brand-navy px-5 py-5">
+                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-brand-gold text-xs font-bold text-brand-gold">
+                  {passo.numero}
+                </span>
+                <div>
+                  <p className="text-sm font-bold tracking-wide text-white uppercase">
+                    {passo.titulo}
+                  </p>
+                  <p className="mt-0.5 text-xs text-white/60">{passo.descricao}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <div className="sticky top-0 z-40 border-b border-zinc-200 bg-white">
+        <div className="mx-auto flex w-full max-w-[1400px] gap-1 overflow-x-auto px-4">
+          <TabLink label="Todos os tipos" active={!tipo} href="/catalogo" />
           {tipos.map((t) => (
-            <FilterLink
+            <TabLink
               key={t}
               label={t}
               active={tipo === t}
@@ -82,7 +127,7 @@ export default async function CatalogoPage({
         </div>
 
         {datas.length > 0 && (
-          <div className="mt-2 flex flex-wrap gap-2">
+          <div className="mx-auto flex w-full max-w-[1400px] flex-wrap gap-2 px-4 pb-3">
             <FilterLink label="Todas as datas" active={!data} href="/catalogo" subtle />
             {datas.map((d) => (
               <FilterLink
@@ -95,7 +140,9 @@ export default async function CatalogoPage({
             ))}
           </div>
         )}
+      </div>
 
+      <main className="mx-auto w-full max-w-[1400px] px-4 py-8">
         {rows.length === 0 ? (
           <p className="mt-16 text-center text-sm text-zinc-400">
             Nenhuma referência aprovada ainda com esse filtro. Assim que o time aprovar
@@ -151,6 +198,22 @@ function ReferenceCard({ reference: r }: { reference: ReferencePhoto }) {
         </p>
         <p className="mt-0.5 text-[11px] text-white/85">Clique para gerar sua foto</p>
       </div>
+    </Link>
+  );
+}
+
+function TabLink({ label, href, active }: { label: string; href: string; active: boolean }) {
+  return (
+    <Link
+      href={href}
+      className={[
+        "shrink-0 cursor-pointer border-b-2 px-3 py-3 text-xs font-bold whitespace-nowrap tracking-wide uppercase transition",
+        active
+          ? "border-brand-gold text-brand-navy"
+          : "border-transparent text-zinc-400 hover:text-brand-navy",
+      ].join(" ")}
+    >
+      {label}
     </Link>
   );
 }

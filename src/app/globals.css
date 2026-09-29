@@ -9,6 +9,8 @@ html {
   --foreground: #000000;
   --brand-black: #000000;
   --brand-blue: #3174a4;
+  --brand-navy: #0e2a3f;
+  --brand-gold: #c9a227;
 }
 
 @theme inline {
@@ -16,6 +18,8 @@ html {
   --color-foreground: var(--foreground);
   --color-brand-black: var(--brand-black);
   --color-brand-blue: var(--brand-blue);
+  --color-brand-navy: var(--brand-navy);
+  --color-brand-gold: var(--brand-gold);
   --font-sans: var(--font-montserrat);
   --font-script: var(--font-dancing-script);
 }
