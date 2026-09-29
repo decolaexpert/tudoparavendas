@@ -7,6 +7,7 @@ import { NoAccess } from "@/components/NoAccess";
 import type { ReferencePhoto } from "@/lib/types";
 
 const PLACEHOLDER_THUMB = "/placeholder-reference.svg";
+const DATAS_TIPO_VALUE = "datas-comemorativas";
 
 const PASSOS = [
   {
@@ -29,7 +30,7 @@ const PASSOS = [
 export default async function CatalogoPage({
   searchParams,
 }: {
-  searchParams: Promise<{ tipo?: string; data?: string }>;
+  searchParams: Promise<{ tipo?: string }>;
 }) {
   const { email, member } = await getCurrentMember();
 
@@ -44,36 +45,41 @@ export default async function CatalogoPage({
     );
   }
 
-  const { tipo, data } = await searchParams;
+  const { tipo } = await searchParams;
+  const verDatas = tipo === DATAS_TIPO_VALUE;
   const supabase = await createClient();
 
-  let query = supabase
-    .from("reference_photos")
-    .select("*")
-    .eq("status", "aprovado")
-    .order("categoria")
-    .order("tipo_peca")
-    .order("ordem");
+  let query = supabase.from("reference_photos").select("*").eq("status", "aprovado");
 
-  if (tipo) query = query.eq("tipo_peca", tipo);
-  if (data) query = query.eq("data_comemorativa", data);
+  if (verDatas) {
+    query = query
+      .eq("categoria", "data_comemorativa")
+      .order("data_comemorativa")
+      .order("tipo_peca")
+      .order("ordem");
+  } else {
+    query = query.eq("categoria", "evergreen").order("tipo_peca").order("ordem");
+    if (tipo) query = query.eq("tipo_peca", tipo);
+  }
 
   const [{ data: references }, { data: filtrosData }] = await Promise.all([
     query,
-    supabase.from("reference_photos").select("tipo_peca, data_comemorativa").eq("status", "aprovado"),
+    supabase
+      .from("reference_photos")
+      .select("tipo_peca")
+      .eq("status", "aprovado")
+      .eq("categoria", "evergreen"),
   ]);
   const rows = (references ?? []) as ReferencePhoto[];
 
   const tipos = Array.from(new Set((filtrosData ?? []).map((r) => r.tipo_peca))).sort();
-  const datas = Array.from(
-    new Set((filtrosData ?? []).map((r) => r.data_comemorativa).filter(Boolean)),
-  ).sort() as string[];
 
   const grupos = new Map<string, ReferencePhoto[]>();
   for (const r of rows) {
-    const grupo = grupos.get(r.tipo_peca) ?? [];
+    const chave = verDatas ? (r.data_comemorativa ?? "Outras datas") : r.tipo_peca;
+    const grupo = grupos.get(chave) ?? [];
     grupo.push(r);
-    grupos.set(r.tipo_peca, grupo);
+    grupos.set(chave, grupo);
   }
 
   return (
@@ -124,22 +130,12 @@ export default async function CatalogoPage({
               href={`/catalogo?tipo=${encodeURIComponent(t)}`}
             />
           ))}
+          <TabLink
+            label="Datas Comemorativas"
+            active={verDatas}
+            href={`/catalogo?tipo=${DATAS_TIPO_VALUE}`}
+          />
         </div>
-
-        {datas.length > 0 && (
-          <div className="mx-auto flex w-full max-w-[1400px] flex-wrap gap-2 px-4 pb-3">
-            <FilterLink label="Todas as datas" active={!data} href="/catalogo" subtle />
-            {datas.map((d) => (
-              <FilterLink
-                key={d}
-                label={d}
-                active={data === d}
-                href={`/catalogo?data=${encodeURIComponent(d)}`}
-                subtle
-              />
-            ))}
-          </div>
-        )}
       </div>
 
       <main className="mx-auto w-full max-w-[1400px] px-4 py-8">
@@ -193,8 +189,7 @@ function ReferenceCard({ reference: r }: { reference: ReferencePhoto }) {
       </div>
       <div className="flex min-h-[72px] flex-col justify-center bg-brand-blue px-3 py-2.5 text-center">
         <p className="text-xs font-bold tracking-wide text-white uppercase">
-          {r.pose}
-          {r.data_comemorativa ? ` · ${r.data_comemorativa}` : ""}
+          {r.data_comemorativa ? `${r.tipo_peca} — ${r.pose}` : r.pose}
         </p>
         <p className="mt-0.5 text-[11px] text-white/85">Clique para gerar sua foto</p>
       </div>
@@ -218,30 +213,3 @@ function TabLink({ label, href, active }: { label: string; href: string; active:
   );
 }
 
-function FilterLink({
-  label,
-  href,
-  active,
-  subtle,
-}: {
-  label: string;
-  href: string;
-  active: boolean;
-  subtle?: boolean;
-}) {
-  return (
-    <Link
-      href={href}
-      className={[
-        "cursor-pointer rounded-full px-3 py-1.5 text-xs font-medium transition",
-        active
-          ? "bg-brand-blue text-white"
-          : subtle
-            ? "bg-white text-zinc-500 ring-1 ring-zinc-200 hover:bg-zinc-50"
-            : "bg-zinc-100 text-zinc-700 hover:bg-zinc-200",
-      ].join(" ")}
-    >
-      {label}
-    </Link>
-  );
-}
