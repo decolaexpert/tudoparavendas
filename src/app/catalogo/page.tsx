@@ -114,7 +114,7 @@ export default async function CatalogoPage({
       </section>
 
       <div className="sticky top-0 z-40 border-b border-zinc-200 bg-white">
-        <div className="mx-auto flex w-full max-w-[1400px] gap-1 overflow-x-auto px-4">
+        <div className="mx-auto flex w-full max-w-[1400px] flex-wrap gap-1 px-4">
           <TabLink label="Todos os tipos" active={!tipo} href="/catalogo" />
           {tipos.map((t) => (
             <TabLink
