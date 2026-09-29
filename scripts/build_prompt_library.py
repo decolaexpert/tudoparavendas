@@ -101,11 +101,6 @@ ANATOMIA_CHECK = {
         "dedos anatomicamente corretos — nunca dedos extras ou "
         "deformados."
     ),
-    "Relógio": (
-        " Mostre exatamente um pulso e uma mão, com exatamente cinco "
-        "dedos anatomicamente corretos — nunca dedos extras, fundidos ou "
-        "uma segunda mão aparecendo no enquadramento."
-    ),
 }
 
 # ---------------------------------------------------------------------------
@@ -195,11 +190,6 @@ TIPO_COMPOSICAO_STILL = {
         "elementos em diferentes regiões da composição para um equilíbrio "
         "visual sofisticado, porém não perfeitamente simétrico."
     ),
-    "Relógio": (
-        "Posicione o relógio em pé, mostrando o mostrador de frente, com "
-        "a pulseira formando uma curva aberta e natural ao redor — "
-        "fisicamente equilibrado, nunca flutuando ou tombado."
-    ),
 }
 
 # Parte do corpo mostrada nas poses humanizadas/lifestyle (sempre sem rosto)
@@ -217,7 +207,6 @@ TIPO_PARTE_CORPO = {
     "Tornozeleira": "o tornozelo e o pé",
     "Broche": "a lapela de um blazer ou prega de tecido",
     "Conjunto (colar + brinco)": "o pescoço, o colo e a orelha",
-    "Relógio": "o pulso",
 }
 
 GENERO_TIPO = {
@@ -225,7 +214,7 @@ GENERO_TIPO = {
     "Colar Longo": "feminino", "Pingente": "feminino", "Corrente Masculina": "masculino",
     "Pulseira": "feminino", "Bracelete/Bangle": "feminino", "Anel": "feminino",
     "Aliança": "unissex", "Tornozeleira": "feminino", "Broche": "feminino",
-    "Conjunto (colar + brinco)": "feminino", "Relógio": "unissex",
+    "Conjunto (colar + brinco)": "feminino",
 }
 
 PERFIS_SUGERIDOS = {
@@ -349,6 +338,11 @@ TEM_MODELO = {
 # ---------------------------------------------------------------------------
 
 DATAS_TEMA = {
+    "Natal": {
+        "paleta": "tons de vermelho, dourado e verde",
+        "props": "ramos verdes, pinha desfocada, luzes de natal desfocadas ao fundo (efeito bokeh dourado)",
+        "clima": "aconchegante, festivo e brilhante",
+    },
     "Dia das Mães": {
         "paleta": "tons de rosa suave e nude",
         "props": "flores (rosas) desfocadas ao fundo, tecido de seda rosa-claro",
@@ -359,10 +353,10 @@ DATAS_TEMA = {
         "props": "pétalas de rosa vermelha, velas acesas desfocadas ao fundo",
         "clima": "romântico, intimista, iluminação quente e noturna",
     },
-    "Dia das Crianças": {
-        "paleta": "tons pastéis vibrantes (amarelo, azul-bebê, rosa-claro)",
-        "props": "pequenos balões desfocados ao fundo, ambiente lúdico",
-        "clima": "leve, alegre e descontraído",
+    "Black Friday": {
+        "paleta": "preto e dourado",
+        "props": "fundo preto fosco, iluminação dramática lateral, reflexo dourado sutil",
+        "clima": "luxuoso, de destaque, alto contraste",
     },
     "Dia dos Pais": {
         "paleta": "tons de azul-marinho e cinza-grafite",
@@ -374,16 +368,6 @@ DATAS_TEMA = {
         "props": "flor de mimosa (amarela) desfocada ao fundo",
         "clima": "moderno, empoderado e sofisticado",
     },
-    "Black Friday": {
-        "paleta": "preto e dourado",
-        "props": "fundo preto fosco, iluminação dramática lateral, reflexo dourado sutil",
-        "clima": "luxuoso, de destaque, alto contraste",
-    },
-    "Natal": {
-        "paleta": "tons de vermelho, dourado e verde",
-        "props": "ramos verdes, pinha desfocada, luzes de natal desfocadas ao fundo (efeito bokeh dourado)",
-        "clima": "aconchegante, festivo e brilhante",
-    },
     "Consciência Negra": {
         "paleta": "tons terrosos e dourados",
         "props": "tecido com estampa de padronagem africana desfocado ao fundo",
@@ -391,8 +375,112 @@ DATAS_TEMA = {
     },
 }
 
+# 5 fotos por data, variando tipo de peça e enquadramento (still/lifestyle) —
+# cada data começa em um ponto diferente da grade tipo×pose pra não repetir
+# sempre a mesma combinação de peça/cenário de uma data pra outra.
 TIPOS_DATA = ["Brinco", "Colar", "Anel", "Pulseira"]
 POSES_DATA = ["Still com Tema", "Lifestyle com Tema"]
+COMBOS_DATA = [(tipo, pose) for tipo in TIPOS_DATA for pose in POSES_DATA]  # 8 combinações
+FOTOS_POR_DATA = 5
+
+# ---------------------------------------------------------------------------
+# Expositores — still de joia sobre um suporte físico de exibição
+# ---------------------------------------------------------------------------
+
+EXPOSITOR_VARIACOES = [
+    (
+        "Expositor de Busto — Colar",
+        "Colar",
+        "Exiba a peça sobre um busto expositor feminino sem rosto, em "
+        "resina fosca branca ou revestido em tecido linho cru, mostrando "
+        "apenas a região do pescoço e dos ombros do busto (não mostrar a "
+        "base nem o suporte inteiro). O colar deve cair naturalmente pela "
+        "gravidade sobre a curva do busto, sem parecer colado ou "
+        "flutuando.",
+        "branco",
+    ),
+    (
+        "Expositor de Busto — Colar Longo",
+        "Colar Longo",
+        "Exiba a peça sobre um busto expositor feminino sem rosto, em "
+        "resina fosca off-white, enquadrado da base do pescoço até o "
+        "meio do tórax. A corrente deve descer naturalmente acompanhando "
+        "o volume do busto, sem parecer colada ou desenhada.",
+        "sombra",
+    ),
+    (
+        "Expositor de Mão — Anel",
+        "Anel",
+        "Exiba a peça em um suporte de mão expositor, em cerâmica ou "
+        "resina fosca branca, com os dedos levemente afastados e "
+        "curvatura anatômica realista — mostrar apenas a mão do "
+        "expositor, sem pulso ou braço além do necessário.",
+        "branco",
+    ),
+    (
+        "Expositor de Mão — Pulseira/Bracelete",
+        "Pulseira",
+        "Exiba a peça em um suporte de pulso expositor cilíndrico, em "
+        "madeira clara ou resina fosca, mostrando apenas o segmento do "
+        "pulso — sem mão, dedos ou antebraço completo.",
+        "textura0",
+    ),
+    (
+        "Expositor de Orelha — Brinco",
+        "Brinco",
+        "Exiba o par de brincos em um suporte expositor no formato de "
+        "orelha, em resina fosca branca ou acrílico transparente, "
+        "mostrando apenas a peça do expositor (sem rosto ou cabeça). "
+        "Caso a peça tenha tarraxa, mantenha uma tarraxa presa em cada "
+        "brinco.",
+        "branco",
+    ),
+    (
+        "Expositor de Orelha — Brinco (Cenário)",
+        "Brinco",
+        "Exiba o par de brincos em um suporte expositor no formato de "
+        "orelha, em cerâmica fosca bege claro, sobre um pano acetinado "
+        "off-white com dobras suaves ao fundo.",
+        "sombra",
+    ),
+    (
+        "Expositor de Correntes — Corrente Masculina",
+        "Corrente Masculina",
+        "Exiba a peça em um suporte expositor de correntes tipo T "
+        "(cabideiro de mesa), em madeira escura ou metal fosco preto, "
+        "mostrando apenas a barra horizontal do suporte — sem a base "
+        "inteira. A corrente deve cair naturalmente dos dois lados da "
+        "barra, formando curvas assimétricas.",
+        "textura1",
+    ),
+    (
+        "Expositor de Correntes — Colar com Pingente",
+        "Pingente",
+        "Exiba a peça pendurada em um suporte expositor de correntes tipo "
+        "T, em acrílico transparente ou resina fosca branca, com o "
+        "pingente centralizado e voltado de frente para a câmera.",
+        "branco",
+    ),
+    (
+        "Expositor de Pescoço — Choker/Gargantilha",
+        "Choker/Gargantilha",
+        "Exiba a peça em um suporte expositor cilíndrico de pescoço, em "
+        "veludo fosco cinza-claro ou resina branca, mostrando apenas o "
+        "cilindro — sem base larga ou pedestal completo.",
+        "textura2",
+    ),
+    (
+        "Expositor Múltiplo — Conjunto",
+        "Conjunto (colar + brinco)",
+        "Exiba as peças do conjunto distribuídas entre um busto expositor "
+        "(colar) e um pequeno suporte de orelha ao lado (brincos), ambos "
+        "em resina fosca da mesma tonalidade off-white, criando um "
+        "display coordenado de vitrine — utilize exatamente as peças "
+        "presentes na foto anexada, na mesma quantidade, sem adicionar ou "
+        "remover nenhuma joia.",
+        "sombra",
+    ),
+]
 
 # ---------------------------------------------------------------------------
 # Montagem dos prompts
@@ -450,6 +538,17 @@ def montar_prompt_data(tipo, pose, data, tema):
     fecho = FECHO_UNIVERSAL.format(aspecto=ASPECTO_PADRAO, anatomia=anatomia)
     return "\n\n".join([FIDELIDADE, cena, tema_txt, tech, fecho])
 
+def montar_prompt_expositor(composicao, tech_key):
+    cena = f"Composição: {composicao}"
+    if tech_key == "branco":
+        tech = tech_still_branco()
+    elif tech_key == "sombra":
+        tech = tech_still_sombra_editorial()
+    else:  # "texturaN"
+        tech = tech_still_textura(int(tech_key[-1]))
+    fecho = FECHO_UNIVERSAL.format(aspecto=ASPECTO_PADRAO, anatomia="")
+    return "\n\n".join([FIDELIDADE, cena, tech, fecho])
+
 rows_evergreen = []
 idx = 1
 for tipo in TIPO_COMPOSICAO_STILL:
@@ -466,18 +565,27 @@ for tipo in TIPO_COMPOSICAO_STILL:
 
 rows_datas = []
 idx = 1
-for data, tema in DATAS_TEMA.items():
-    for tipo in TIPOS_DATA:
+for di, (data, tema) in enumerate(DATAS_TEMA.items()):
+    offset = (di * FOTOS_POR_DATA) % len(COMBOS_DATA)
+    combos_rotacionados = COMBOS_DATA[offset:] + COMBOS_DATA[:offset]
+    for tipo, pose in combos_rotacionados[:FOTOS_POR_DATA]:
         genero = GENERO_TIPO[tipo]
-        for pose in POSES_DATA:
-            prompt = montar_prompt_data(tipo, pose, data, tema)
-            tem_modelo = "Não" if pose == "Still com Tema" else "Sim (parte do corpo, sem rosto)"
-            perfis = PERFIS_SUGERIDOS[genero] if tem_modelo.startswith("Sim") else ""
-            nome_ref = f"{slug(data)}_{slug(tipo)}_{slug(pose)}"
-            rows_datas.append([
-                idx, data, tipo, pose, tem_modelo, perfis, nome_ref, prompt, ASPECTO_PADRAO, "A gerar", "", "",
-            ])
-            idx += 1
+        prompt = montar_prompt_data(tipo, pose, data, tema)
+        tem_modelo = "Não" if pose == "Still com Tema" else "Sim (parte do corpo, sem rosto)"
+        perfis = PERFIS_SUGERIDOS[genero] if tem_modelo.startswith("Sim") else ""
+        nome_ref = f"{slug(data)}_{slug(tipo)}_{slug(pose)}"
+        rows_datas.append([
+            idx, data, tipo, pose, tem_modelo, perfis, nome_ref, prompt, ASPECTO_PADRAO, "A gerar", "", "",
+        ])
+        idx += 1
+
+rows_expositores = []
+for idx, (nome, tipo, composicao, tech_key) in enumerate(EXPOSITOR_VARIACOES, start=1):
+    prompt = montar_prompt_expositor(composicao, tech_key)
+    nome_ref = f"expositor_{idx:02d}_{slug(tipo)}"
+    rows_expositores.append([
+        idx, "Expositor", nome, "Não", "", nome_ref, prompt, ASPECTO_PADRAO, "A gerar", "", "",
+    ])
 
 # ---------------------------------------------------------------------------
 # Excel
@@ -595,8 +703,26 @@ for r_i in range(2, ws2.max_row + 1):
 ws2.freeze_panes = "A2"
 ws2.auto_filter.ref = ws2.dimensions
 
+ws3 = wb.create_sheet("Expositores")
+ws3.append(headers)  # mesmo layout de colunas da aba Evergreen
+style_header(ws3, len(headers))
+for row in rows_expositores:
+    ws3.append(row)
+
+autofit(ws3, widths1)
+for r_i in range(2, ws3.max_row + 1):
+    for c_i in range(1, len(headers) + 1):
+        cell = ws3.cell(row=r_i, column=c_i)
+        cell.font = CELL_FONT
+        cell.border = BORDER
+        cell.alignment = Alignment(wrap_text=True, vertical="top")
+    ws3.row_dimensions[r_i].height = 130
+ws3.freeze_panes = "A2"
+ws3.auto_filter.ref = ws3.dimensions
+
 out_path = "content/Photo_Studio_TPV_Biblioteca_de_Prompts.xlsx"
 wb.save(out_path)
 print("OK:", out_path)
 print("Evergreen rows:", len(rows_evergreen))
 print("Datas rows:", len(rows_datas))
+print("Expositores rows:", len(rows_expositores))

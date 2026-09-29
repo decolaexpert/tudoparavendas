@@ -33,6 +33,7 @@ def main():
     wb = openpyxl.load_workbook(XLSX_PATH, data_only=True)
     rows = rows_from(wb["Evergreen"], "Nome de Referência", "Prompt Mestre")
     rows += rows_from(wb["Datas Comemorativas"], "Nome de Referência", "Prompt Mestre")
+    rows += rows_from(wb["Expositores"], "Nome de Referência", "Prompt Mestre")
 
     total_parts = math.ceil(len(rows) / ROWS_PER_FILE)
     for part in range(total_parts):

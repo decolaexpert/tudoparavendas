@@ -10,12 +10,13 @@ import sys
 import openpyxl
 
 XLSX_PATH = "content/Photo_Studio_TPV_Biblioteca_de_Prompts.xlsx"
-VERSAO = "v4"
+VERSAO = "v5"
 CHANGELOG = (
-    "v4: reforça fidelidade de quantidade (contar exatamente quantas peças "
-    "existem na foto anexada, nunca inventar/duplicar/completar o "
-    "conjunto) e adiciona checagem de anatomia (mão/dedos/pé) nas poses "
-    "humanizadas e lifestyle que mostram partes do corpo."
+    "v5: remove a categoria Relógio; Datas Comemorativas passou a ter "
+    "apenas 5 fotos por data (variando peça e cenário) em vez de 8; "
+    "adiciona a nova aba Expositores (still de joia sobre suporte de "
+    "exibição: busto, mão, orelha, correntes). Mantém a fidelidade de "
+    "quantidade e a checagem de anatomia da v4."
 )
 SEP = "-" * 72
 DSEP = "=" * 72
@@ -63,6 +64,7 @@ def main():
     wb = openpyxl.load_workbook(XLSX_PATH, data_only=True)
     evergreen = rows_from(wb["Evergreen"], [])
     datas = rows_from(wb["Datas Comemorativas"], ["Data Comemorativa"])
+    expositores = rows_from(wb["Expositores"], [])
 
     lines = [
         f"PHOTO STUDIO TPV — PROMPTS PARA GERAR AS FOTOS-MESTRE NO GEMINI ({VERSAO})",
@@ -96,10 +98,16 @@ def main():
         titulo = f"{item['tipo_peca']} — {item['pose']} — {item['Data Comemorativa']}"
         render_item(lines, n, titulo, item)
 
+    lines += ["", HSEP, "# ABA: EXPOSITORES", HSEP, ""]
+
+    for n, item in enumerate(expositores, start=len(evergreen) + len(datas) + 1):
+        render_item(lines, n, f"{item['tipo_peca']} — {item['pose']}", item)
+
     with open(out_path, "w", encoding="utf-8") as f:
         f.write("\n".join(lines) + "\n")
 
-    print(f"OK: {len(evergreen) + len(datas)} prompts escritos em {out_path}")
+    total = len(evergreen) + len(datas) + len(expositores)
+    print(f"OK: {total} prompts escritos em {out_path}")
 
 
 if __name__ == "__main__":
