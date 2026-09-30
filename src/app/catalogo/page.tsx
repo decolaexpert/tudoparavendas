@@ -100,10 +100,7 @@ export default async function CatalogoPage({
 
       <section className="bg-brand-navy">
         <div className="mx-auto w-full max-w-[1400px] px-4 py-10 sm:py-14">
-          <p className="text-xs font-bold tracking-[0.3em] text-brand-gold uppercase">
-            Photo Studio TPV
-          </p>
-          <h1 className="mt-3 flex flex-wrap items-center gap-3 text-3xl font-semibold text-white sm:text-4xl">
+          <h1 className="flex flex-wrap items-center gap-3 text-3xl font-semibold text-white sm:text-4xl">
             Fotos profissionais para suas joias
             <span aria-hidden className="text-brand-gold">
               ✦
