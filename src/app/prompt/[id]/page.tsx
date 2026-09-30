@@ -7,6 +7,7 @@ import { NoAccess } from "@/components/NoAccess";
 import { CopyPromptCard } from "@/components/CopyPromptCard";
 
 const PLACEHOLDER_THUMB = "/placeholder-reference.svg";
+const VOCE_MODELO_TIPO = "Peças em Você";
 
 export default async function GerarPage({
   params,
@@ -58,7 +59,10 @@ export default async function GerarPage({
             </p>
           </div>
 
-          <CopyPromptCard prompt={reference.prompt_mestre} />
+          <CopyPromptCard
+            prompt={reference.prompt_mestre}
+            duasFotos={reference.tipo_peca === VOCE_MODELO_TIPO}
+          />
         </div>
       </main>
     </>

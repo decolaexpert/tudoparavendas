@@ -483,6 +483,341 @@ EXPOSITOR_VARIACOES = [
 ]
 
 # ---------------------------------------------------------------------------
+# Lifestyle — still de joia em modelo genérica, rosto completo à mostra,
+# variando gênero e etnia (10 fotos: 5 mulheres, 5 homens)
+# ---------------------------------------------------------------------------
+
+def tech_lifestyle_completo():
+    return (
+        "Fotografia lifestyle hiper-realista para campanha de joias, em "
+        "formato vertical 3:4 e altíssima resolução. Rosto e expressão da "
+        "modelo aparecem naturalmente, sem pose rígida ou artificial — a "
+        "cena deve parecer um flagrante espontâneo do dia a dia, nunca uma "
+        "fotografia de estúdio posada. Lente equivalente a 85mm, "
+        "profundidade de campo rasa, fundo suavemente desfocado. A joia "
+        "permanece perfeitamente nítida e prioritária no foco, com "
+        "reflexos fisicamente corretos no metal. Pele com textura natural, "
+        "sem efeito plástico ou de filtro. Mãos, quando aparecerem, devem "
+        "ter anatomia perfeita — sempre cinco dedos, nunca deformados, "
+        "duplicados ou fundidos."
+    )
+
+LIFESTYLE_VARIACOES = [
+    (
+        "Mulher — Colar (Terraço)",
+        "Colar",
+        "Mulher negra, aproximadamente 30 anos, cabelo cacheado natural "
+        "com volume, pele com brilho saudável. Ela está sentada em um "
+        "terraço ensolarado, apoiada em uma mesa de vime clara, segurando "
+        "uma xícara de café com as duas mãos próximas ao colo, sorrindo "
+        "de forma leve e genuína enquanto olha para o horizonte, fora da "
+        "câmera. Veste uma blusa de linho branca de gola V. Luz natural "
+        "da manhã, suave e dourada, incidindo lateralmente. Enquadramento "
+        "da cintura para cima, evidenciando pescoço e colo para valorizar "
+        "o colar.",
+    ),
+    (
+        "Mulher — Brinco e Anel (Café de Rua)",
+        "Brinco e Anel",
+        "Mulher branca, cabelo loiro liso preso em um rabo de cavalo "
+        "baixo, sentada em uma mesinha de um café de rua em uma cidade "
+        "europeia, apoiando o queixo em uma das mãos enquanto segura um "
+        "pequeno espresso com a outra. Sorriso discreto, olhar para o "
+        "lado, fora da câmera. Veste um blazer bege sobre uma blusa "
+        "branca. Luz natural de fim de manhã, fria e nublada, sombras "
+        "suaves. Enquadramento da cintura para cima, valorizando a orelha "
+        "e a mão que segura o queixo.",
+    ),
+    (
+        "Mulher — Colar Longo (Janela)",
+        "Colar Longo",
+        "Mulher ruiva, cabelo ondulado solto sobre os ombros, em pé ao "
+        "lado de uma grande janela com cortina translúcida, uma mão "
+        "ajeitando delicadamente uma mecha de cabelo atrás da orelha "
+        "enquanto olha para fora, expressão tranquila. Veste uma camisa "
+        "de seda off-white. Luz natural lateral entrando pela janela, "
+        "criando contraste suave entre luz e sombra no rosto. "
+        "Enquadramento do peito para cima, evidenciando pescoço, colo e "
+        "orelha.",
+    ),
+    (
+        "Mulher — Brinco (Jardim)",
+        "Brinco",
+        "Mulher negra de pele clara, cabelo trançado preso para trás, "
+        "caminhando em um jardim com vegetação desfocada ao fundo, com a "
+        "cabeça levemente inclinada para trás enquanto sorri abertamente "
+        "para o céu, em um gesto espontâneo de alegria. Veste um vestido "
+        "de linho verde-oliva sem mangas. Luz natural de tarde, quente, "
+        "levemente contraluz. Enquadramento da cintura para cima, "
+        "valorizando pescoço e orelhas.",
+    ),
+    (
+        "Mulher — Pulseira (Sofá)",
+        "Pulseira",
+        "Mulher branca, cabelo castanho-claro solto com ondas suaves, "
+        "sentada em um sofá bege em ambiente doméstico aconchegante, com "
+        "uma das pernas dobrada sobre o assento, segurando um celular "
+        "com as duas mãos e olhando para a tela com expressão tranquila. "
+        "Veste uma camisa branca oversized. Luz natural suave de janela "
+        "lateral, ambiente claro e minimalista. Enquadramento evidenciando "
+        "mãos, pulsos e colo.",
+    ),
+    (
+        "Homem — Corrente (Escritório)",
+        "Corrente Masculina",
+        "Homem branco, aproximadamente 35 anos, cabelo curto bem cuidado, "
+        "em pé junto a uma janela de um escritório moderno, uma mão no "
+        "bolso da calça enquanto observa a paisagem urbana desfocada ao "
+        "fundo, expressão séria e confiante. Veste uma camisa social "
+        "azul-marinho com as mangas dobradas até o antebraço. Luz natural "
+        "fria entrando pela janela, contraste moderado. Enquadramento do "
+        "peito para cima, valorizando pescoço e punho.",
+    ),
+    (
+        "Homem — Pulseira (Rua)",
+        "Pulseira/Bracelete",
+        "Homem negro, cabelo curto raspado nas laterais, caminhando em "
+        "uma rua urbana com paredes de tijolo desfocadas ao fundo, mãos "
+        "nos bolsos de uma jaqueta jeans, olhar confiante direcionado "
+        "para o lado, fora da câmera. Veste uma camiseta branca básica "
+        "sob a jaqueta. Luz natural de fim de tarde, dourada e lateral. "
+        "Enquadramento da cintura para cima, valorizando pulso e "
+        "antebraço.",
+    ),
+    (
+        "Homem — Anel (Café)",
+        "Anel",
+        "Homem branco com barba curta bem aparada, sentado em uma mesa "
+        "de madeira em um café, segurando uma xícara de café preta com "
+        "uma das mãos apoiada sobre a mesa, olhando para baixo em direção "
+        "à xícara com expressão relaxada. Veste um suéter cinza de gola "
+        "redonda. Luz natural suave de janela, tons quentes. "
+        "Enquadramento fechado na mão e no antebraço apoiados sobre a "
+        "mesa.",
+    ),
+    (
+        "Homem — Corrente (Varanda)",
+        "Corrente Masculina",
+        "Homem negro, cabelo curto, em pé em uma varanda ao entardecer, "
+        "apoiado no parapeito com os dois antebraços, camisa social "
+        "branca com os primeiros botões abertos, olhando para o horizonte "
+        "com expressão tranquila. Luz dourada de fim de tarde, contraluz "
+        "suave. Enquadramento do peito para cima, evidenciando pescoço e "
+        "colo aberto pela camisa.",
+    ),
+    (
+        "Homem — Pulseira (Externo)",
+        "Pulseira",
+        "Homem de pele morena clara, cabelo curto penteado para o lado, "
+        "em pé em um ambiente externo arborizado, uma das mãos no bolso "
+        "da calça e a outra relaxada ao lado do corpo, expressão "
+        "descontraída, olhando levemente para baixo. Veste uma camisa de "
+        "linho bege aberta sobre uma camiseta branca. Luz natural difusa "
+        "de dia nublado. Enquadramento da cintura para cima, valorizando "
+        "pulso e mão.",
+    ),
+]
+
+# ---------------------------------------------------------------------------
+# Peças em Você — usa DUAS fotos anexadas (a própria assinante + a joia),
+# a IA compõe a identidade da FOTO 1 usando as joias da FOTO 2
+# (10 fotos, poses variadas cobrindo brinco/colar/anel/pulseira/conjunto)
+# ---------------------------------------------------------------------------
+
+FIDELIDADE_IDENTIDADE = (
+    "Serão anexadas duas fotografias: a FOTO 1, com o rosto da própria "
+    "assinante, e a FOTO 2, com a(s) joia(s) do produto. A FOTO 1 "
+    "determina exclusivamente a identidade da modelo: preserve fielmente "
+    "formato do rosto, olhos, sobrancelhas, nariz, boca, mandíbula, "
+    "proporções faciais, tom de pele e cabelo (cor, comprimento e textura "
+    "reais) — a pessoa da imagem final deve continuar claramente "
+    "reconhecível como a mesma pessoa da FOTO 1. Não a transforme em um "
+    "rosto genérico, não rejuvenesça, não altere suas feições ou idade "
+    "aparente. A FOTO 2 determina exclusivamente as joias: identifique "
+    "exatamente quantas peças e de que tipo existem nela e utilize "
+    "somente essas peças, na mesma quantidade — nunca invente, duplique, "
+    "remova ou substitua nenhuma peça; preserve formato, proporções, "
+    "espessura, acabamento, brilho, cor do metal, pedras e todos os "
+    "detalhes originais. Se a FOTO 2 contiver outra pessoa, ignore "
+    "completamente essa pessoa — rosto, corpo, pele, cabelo, roupa e pose "
+    "não servem de referência, apenas as joias. Nunca misture as duas "
+    "fotos: cabelo e tom de pele vêm sempre da FOTO 1; joias vêm sempre "
+    "da FOTO 2. Se determinado tipo de joia não existir na FOTO 2, ele "
+    "não deve aparecer na imagem final sob nenhuma hipótese."
+)
+
+FECHO_IDENTIDADE = (
+    "Qualidade: altíssima resolução, nitidez máxima no rosto e na(s) "
+    "joia(s), textura de pele natural e realista (sem efeito plástico ou "
+    "de filtro de beleza), reflexos fisicamente corretos no metal, cores "
+    "fiéis. Mãos e dedos, quando aparecerem, devem ter anatomia perfeita "
+    "— sempre cinco dedos, nunca deformados, fundidos ou duplicados, e "
+    "nunca uma segunda mão ou braço aparecendo acidentalmente no "
+    "enquadramento. Antes de finalizar, confirme item por item: o rosto "
+    "ainda é claramente reconhecível como a pessoa da FOTO 1; a "
+    "quantidade e o tipo de joias são idênticos aos da FOTO 2; nenhuma "
+    "peça foi inventada, duplicada ou removida. Formato final da imagem: "
+    "{aspecto}."
+)
+
+VOCE_MODELO_VARIACOES = [
+    (
+        "Retrato Frontal — Colar",
+        "Colar",
+        "Composição: retrato fechado, mostrando cabeça, pescoço, colo e "
+        "ombros. O rosto permanece voltado quase totalmente para a "
+        "câmera, com uma rotação lateral muito sutil e leve inclinação "
+        "da cabeça para baixo. Olhar direto para a lente, expressão séria "
+        "e segura, lábios relaxados sem sorriso. Cabelo completamente "
+        "solto, penteado para trás com efeito levemente úmido, deixando "
+        "testa, orelhas, pescoço e colo totalmente visíveis. Vestir uma "
+        "peça preta tomara-que-caia minimalista, ombros e colo à mostra. "
+        "Fundo liso em cinza-grafite bem escuro. Iluminação de estúdio "
+        "forte e direcional vinda de um dos lados e ligeiramente de cima: "
+        "o rosto deve ficar muito iluminado de um lado e com sombra mais "
+        "marcada do outro, mas pescoço e colo permanecem claros o "
+        "suficiente para valorizar plenamente o colar. Quando houver "
+        "brincos, manter as duas orelhas visíveis.",
+    ),
+    (
+        "Mão no Rosto — Anel e Pulseira",
+        "Anel e Pulseira",
+        "Composição: retrato fechado do rosto e ombros, com uma das mãos "
+        "levantada cobrindo parcialmente um dos olhos, dorso da mão "
+        "voltado para a câmera, dedos estendidos e relaxados. A outra "
+        "mão não aparece no enquadramento. Expressão neutra e "
+        "sofisticada, olhar direto para a lente através do espaço entre "
+        "os dedos. Cabelo solto, repartido ao meio, caindo naturalmente "
+        "atrás dos ombros. Vestir uma blusa de tricô canelado off-white "
+        "sem mangas. Fundo liso em bege claro. Iluminação de estúdio "
+        "suave e lateral, com leve sombra do lado oposto à luz. Quando "
+        "houver anel, posicioná-lo no dedo correspondente da mão "
+        "levantada; quando houver pulseira, mantê-la visível no pulso "
+        "dessa mesma mão.",
+    ),
+    (
+        "Perfil com Coque — Brinco e Colar",
+        "Brinco e Colar",
+        "Composição: retrato fechado em perfil de aproximadamente três "
+        "quartos, cabeça claramente virada para o lado, queixo levemente "
+        "elevado, pescoço alongado e visível. Olhar direcionado para o "
+        "lado, fora do enquadramento. Lábios levemente entreabertos, sem "
+        "sorriso. Cabelo preso em coque alto, deixando nuca, pescoço e "
+        "orelha completamente visíveis. Vestir uma camisa branca ampla, "
+        "caída sobre os ombros, decote em V comportado, sem expor o colo "
+        "além das clavículas. Fundo liso em tom terracota quente. "
+        "Iluminação de estúdio lateral e suave, destacando claramente "
+        "pescoço, orelha e colo. Quando houver colar, mantê-lo totalmente "
+        "visível sobre o colo; quando houver brinco, a orelha do lado "
+        "virado para a câmera permanece livre de cabelo.",
+    ),
+    (
+        "Mão na Cabeça — Anel",
+        "Anel",
+        "Composição: retrato fechado em perfil de três quartos, um dos "
+        "braços dobrado para cima com a mão apoiada delicadamente na "
+        "lateral da cabeça, próxima à têmpora — os dedos tocam apenas o "
+        "cabelo, sem pressionar o rosto. Cotovelo apoiado sobre uma "
+        "superfície fora de quadro. A outra mão não aparece. Olhar "
+        "direcionado para o lado, expressão tranquila. Cabelo solto "
+        "caindo sobre o ombro oposto ao braço levantado. Vestir uma "
+        "blusa preta simples de alças finas. Fundo liso em cinza claro. "
+        "Iluminação suave e difusa, levemente lateral. Quando houver "
+        "anel, posicioná-lo no dedo visível da mão levantada.",
+    ),
+    (
+        "Cadeira ao Contrário — Conjunto",
+        "Conjunto (colar + brinco)",
+        "Composição: modelo sentada ao contrário em uma cadeira branca "
+        "minimalista, encosto voltado para a frente do corpo, tronco e "
+        "cadeira levemente girados em diagonal (cerca de 20 a 30 graus) "
+        "em relação à câmera. Um braço cruza a frente do encosto; o "
+        "outro sobe com o cotovelo apoiado sobre o encosto e a mão "
+        "repousando perto da têmpora. Cabeça inclinada suavemente em "
+        "direção a essa mão, olhos voltados para a câmera, expressão "
+        "tranquila e lábios levemente entreabertos. Cabelo preso em "
+        "coque baixo com fios soltos ao redor do rosto. Vestir uma "
+        "regata preta simples. Fundo liso off-white. Iluminação difusa e "
+        "lateral, acompanhando a diagonal da pose. Quando houver "
+        "pulseira, ela deve ficar no pulso da mão próxima ao rosto; "
+        "quando houver colar e brincos, ambos permanecem visíveis e bem "
+        "iluminados.",
+    ),
+    (
+        "Debruçada na Mesa — Colar e Brinco",
+        "Colar e Brinco",
+        "Composição: modelo debruçada sobre uma mesa branca lisa, tronco "
+        "inclinado para frente e levemente para o lado, um ombro mais "
+        "próximo da câmera que o outro. Um braço sobe com a mão apoiada "
+        "na lateral superior da cabeça, sobre o cabelo, sem cobrir a "
+        "testa; o outro braço fica totalmente apoiado sobre a mesa, mão "
+        "relaxada sobre a superfície, sem tocar o outro braço. Olhar "
+        "direto para a câmera, expressão segura e elegante, sem sinais "
+        "de cansaço. Cabelo solto, penteado para trás. Vestir uma camisa "
+        "branca ampla e moderna. Fundo liso em cinza claro. Iluminação "
+        "de estúdio clara e lateral, com sombras suaves da mesa e dos "
+        "braços. Quando houver colar, mantê-lo visível sobre o colo; "
+        "quando houver brinco, a orelha correspondente permanece livre; "
+        "quando houver anel, posicioná-lo na mão apoiada sobre a mesa.",
+    ),
+    (
+        "Regata Frontal — Colar",
+        "Colar",
+        "Composição: retrato fechado quase frontal, corpo levemente "
+        "apoiado contra uma parede lisa atrás, ombros relaxados, cabeça "
+        "praticamente reta com inclinação mínima. Olhar direto para a "
+        "câmera, expressão neutra e contemporânea, lábios relaxados e "
+        "suavemente entreabertos. Cabelo solto com leve movimento, uma "
+        "mecha podendo cruzar parte do rosto de forma natural, mantendo "
+        "pelo menos um olho sempre visível. Vestir uma regata preta lisa "
+        "e minimalista, decote arredondado moderado. Fundo em parede "
+        "branca lisa. Iluminação natural lateral, criando sombra suave "
+        "da modelo sobre a parede ao fundo. Quando houver colar, o "
+        "decote deve deixá-lo totalmente visível sobre o colo.",
+    ),
+    (
+        "Vento no Cabelo — Brinco",
+        "Brinco",
+        "Composição: retrato fechado frontal, corpo praticamente reto e "
+        "relaxado, cabeça reta, olhar direto para a câmera. O cabelo "
+        "aparece solto e movimentado lateralmente por vento, com uma "
+        "mecha cruzando parte do rosto e um dos olhos, mantendo a outra "
+        "metade do rosto e uma orelha completamente visíveis. Expressão "
+        "tranquila e natural. Vestir uma camisa social clara aberta nos "
+        "ombros. Fundo liso e neutro. Iluminação lateral suave, simulando "
+        "luz de sol filtrada. Quando houver brinco, a orelha visível deve "
+        "ficar totalmente livre de cabelo para destacá-lo.",
+    ),
+    (
+        "Apoiada em Cadeira — Pulseira",
+        "Pulseira",
+        "Composição: modelo em pé, apoiada casualmente no encosto de uma "
+        "cadeira branca minimalista, um braço apoiado sobre o encosto "
+        "com o pulso e a mão relaxados e visíveis, o outro braço relaxado "
+        "ao lado do corpo. Corpo levemente girado em relação à câmera, "
+        "olhar direto para a lente, expressão serena. Cabelo solto com "
+        "ondas suaves. Vestir uma camisa de linho bege. Fundo liso em "
+        "tom areia. Iluminação suave e natural, lateral. Quando houver "
+        "pulseira, ela deve ficar visível no pulso apoiado sobre o "
+        "encosto da cadeira.",
+    ),
+    (
+        "Espelho com Celular — Brinco",
+        "Brinco",
+        "Composição: modelo em pé diante de um espelho de moldura fina "
+        "preta com cantos arredondados, segurando um smartphone com as "
+        "duas mãos em frente ao rosto, cobrindo boa parte dele — apenas "
+        "testa, cabelo, mandíbula e uma orelha permanecem visíveis. "
+        "Cabelo solto, penteado atrás da orelha visível. Vestir uma "
+        "camisa branca oversized com um ombro levemente à mostra. Fundo "
+        "minimalista, parede lisa em cinza muito claro. Iluminação "
+        "suave, sugerindo uma janela fora do enquadramento, incidindo "
+        "lateralmente. Quando houver brinco, a orelha visível deve "
+        "permanecer totalmente livre de cabelo para destacá-lo.",
+    ),
+]
+
+# ---------------------------------------------------------------------------
 # Montagem dos prompts
 # ---------------------------------------------------------------------------
 
@@ -549,6 +884,14 @@ def montar_prompt_expositor(composicao, tech_key):
     fecho = FECHO_UNIVERSAL.format(aspecto=ASPECTO_PADRAO, anatomia="")
     return "\n\n".join([FIDELIDADE, cena, tech, fecho])
 
+def montar_prompt_lifestyle(cena):
+    fecho = FECHO_UNIVERSAL.format(aspecto=ASPECTO_PADRAO, anatomia="")
+    return "\n\n".join([FIDELIDADE, f"Composição: {cena}", tech_lifestyle_completo(), fecho])
+
+def montar_prompt_voce_modelo(cena):
+    fecho = FECHO_IDENTIDADE.format(aspecto=ASPECTO_PADRAO)
+    return "\n\n".join([FIDELIDADE_IDENTIDADE, cena, fecho])
+
 rows_evergreen = []
 idx = 1
 for tipo in TIPO_COMPOSICAO_STILL:
@@ -585,6 +928,22 @@ for idx, (nome, tipo, composicao, tech_key) in enumerate(EXPOSITOR_VARIACOES, st
     nome_ref = f"expositor_{idx:02d}_{slug(tipo)}"
     rows_expositores.append([
         idx, "Expositor", nome, "Não", "", nome_ref, prompt, ASPECTO_PADRAO, "A gerar", "", "",
+    ])
+
+rows_lifestyle = []
+for idx, (nome, combo, cena) in enumerate(LIFESTYLE_VARIACOES, start=1):
+    prompt = montar_prompt_lifestyle(cena)
+    nome_ref = f"lifestyle_{idx:02d}_{slug(nome.split('—')[0].strip())}"
+    rows_lifestyle.append([
+        idx, "Lifestyle", nome, "Sim (rosto completo)", "", nome_ref, prompt, ASPECTO_PADRAO, "A gerar", "", "",
+    ])
+
+rows_voce_modelo = []
+for idx, (nome, combo, cena) in enumerate(VOCE_MODELO_VARIACOES, start=1):
+    prompt = montar_prompt_voce_modelo(cena)
+    nome_ref = f"voce_{idx:02d}_{slug(nome.split('—')[0].strip())}"
+    rows_voce_modelo.append([
+        idx, "Peças em Você", nome, "Sim (requer 2 fotos: sua + joia)", "", nome_ref, prompt, ASPECTO_PADRAO, "A gerar", "", "",
     ])
 
 # ---------------------------------------------------------------------------
@@ -720,9 +1079,45 @@ for r_i in range(2, ws3.max_row + 1):
 ws3.freeze_panes = "A2"
 ws3.auto_filter.ref = ws3.dimensions
 
+ws4 = wb.create_sheet("Lifestyle")
+ws4.append(headers)  # mesmo layout de colunas da aba Evergreen
+style_header(ws4, len(headers))
+for row in rows_lifestyle:
+    ws4.append(row)
+
+autofit(ws4, widths1)
+for r_i in range(2, ws4.max_row + 1):
+    for c_i in range(1, len(headers) + 1):
+        cell = ws4.cell(row=r_i, column=c_i)
+        cell.font = CELL_FONT
+        cell.border = BORDER
+        cell.alignment = Alignment(wrap_text=True, vertical="top")
+    ws4.row_dimensions[r_i].height = 130
+ws4.freeze_panes = "A2"
+ws4.auto_filter.ref = ws4.dimensions
+
+ws5 = wb.create_sheet("Peças em Você")
+ws5.append(headers)  # mesmo layout de colunas da aba Evergreen
+style_header(ws5, len(headers))
+for row in rows_voce_modelo:
+    ws5.append(row)
+
+autofit(ws5, widths1)
+for r_i in range(2, ws5.max_row + 1):
+    for c_i in range(1, len(headers) + 1):
+        cell = ws5.cell(row=r_i, column=c_i)
+        cell.font = CELL_FONT
+        cell.border = BORDER
+        cell.alignment = Alignment(wrap_text=True, vertical="top")
+    ws5.row_dimensions[r_i].height = 160
+ws5.freeze_panes = "A2"
+ws5.auto_filter.ref = ws5.dimensions
+
 out_path = "content/Photo_Studio_TPV_Biblioteca_de_Prompts.xlsx"
 wb.save(out_path)
 print("OK:", out_path)
 print("Evergreen rows:", len(rows_evergreen))
 print("Datas rows:", len(rows_datas))
 print("Expositores rows:", len(rows_expositores))
+print("Lifestyle rows:", len(rows_lifestyle))
+print("Peças em Você rows:", len(rows_voce_modelo))

@@ -62,6 +62,44 @@ def rows_from_expositores(ws):
     return out
 
 
+def rows_from_lifestyle(ws):
+    out = []
+    headers = [c.value for c in ws[1]]
+    idx = {h: i for i, h in enumerate(headers)}
+    for row in ws.iter_rows(min_row=2, values_only=True):
+        out.append({
+            "categoria": "evergreen",
+            "tipo_peca": row[idx["Tipo de Peça"]],
+            "pose": row[idx["Pose/Enquadramento"]],
+            "data_comemorativa": None,
+            "nome_referencia": row[idx["Nome de Referência"]],
+            "prompt_mestre": row[idx["Prompt Mestre"]],
+            "perfis_sugeridos": row[idx["Perfis Sugeridos"]] or None,
+            "aspecto": row[idx["Proporção"]],
+            "ordem": row[idx["ID"]],
+        })
+    return out
+
+
+def rows_from_voce_modelo(ws):
+    out = []
+    headers = [c.value for c in ws[1]]
+    idx = {h: i for i, h in enumerate(headers)}
+    for row in ws.iter_rows(min_row=2, values_only=True):
+        out.append({
+            "categoria": "evergreen",
+            "tipo_peca": row[idx["Tipo de Peça"]],
+            "pose": row[idx["Pose/Enquadramento"]],
+            "data_comemorativa": None,
+            "nome_referencia": row[idx["Nome de Referência"]],
+            "prompt_mestre": row[idx["Prompt Mestre"]],
+            "perfis_sugeridos": row[idx["Perfis Sugeridos"]] or None,
+            "aspecto": row[idx["Proporção"]],
+            "ordem": row[idx["ID"]],
+        })
+    return out
+
+
 def rows_from_datas(ws):
     out = []
     headers = [c.value for c in ws[1]]
@@ -87,6 +125,8 @@ def main():
         rows_from_evergreen(wb["Evergreen"])
         + rows_from_datas(wb["Datas Comemorativas"])
         + rows_from_expositores(wb["Expositores"])
+        + rows_from_lifestyle(wb["Lifestyle"])
+        + rows_from_voce_modelo(wb["Peças em Você"])
     )
 
     lines = [

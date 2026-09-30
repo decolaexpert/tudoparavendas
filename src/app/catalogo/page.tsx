@@ -8,6 +8,7 @@ import type { ReferencePhoto } from "@/lib/types";
 
 const PLACEHOLDER_THUMB = "/placeholder-reference.svg";
 const DATAS_TIPO_VALUE = "datas-comemorativas";
+const VOCE_MODELO_TIPO = "Peças em Você";
 
 const PASSOS = [
   {
@@ -49,34 +50,45 @@ export default async function CatalogoPage({
   const verDatas = tipo === DATAS_TIPO_VALUE;
   const supabase = await createClient();
 
-  let query = supabase.from("reference_photos").select("*").eq("status", "aprovado");
+  const base = () => supabase.from("reference_photos").select("*").eq("status", "aprovado");
 
-  if (verDatas) {
-    query = query
-      .eq("categoria", "data_comemorativa")
-      .order("data_comemorativa")
-      .order("tipo_peca")
-      .order("ordem");
-  } else {
-    query = query.eq("categoria", "evergreen").order("tipo_peca").order("ordem");
-    if (tipo) query = query.eq("tipo_peca", tipo);
+  async function fetchRows(): Promise<ReferencePhoto[]> {
+    if (verDatas) {
+      const { data } = await base().eq("categoria", "data_comemorativa").order("ordem");
+      return (data ?? []) as ReferencePhoto[];
+    }
+    if (tipo) {
+      const { data } = await base()
+        .eq("categoria", "evergreen")
+        .eq("tipo_peca", tipo)
+        .order("ordem");
+      return (data ?? []) as ReferencePhoto[];
+    }
+    // "Todos os tipos": evergreen inteiro + datas comemorativas inteiras, tudo aberto.
+    const [evergreen, datas] = await Promise.all([
+      base().eq("categoria", "evergreen").order("tipo_peca").order("ordem"),
+      base().eq("categoria", "data_comemorativa").order("ordem"),
+    ]);
+    return [
+      ...((evergreen.data ?? []) as ReferencePhoto[]),
+      ...((datas.data ?? []) as ReferencePhoto[]),
+    ];
   }
 
-  const [{ data: references }, { data: filtrosData }] = await Promise.all([
-    query,
+  const [rows, { data: filtrosData }] = await Promise.all([
+    fetchRows(),
     supabase
       .from("reference_photos")
       .select("tipo_peca")
       .eq("status", "aprovado")
       .eq("categoria", "evergreen"),
   ]);
-  const rows = (references ?? []) as ReferencePhoto[];
 
   const tipos = Array.from(new Set((filtrosData ?? []).map((r) => r.tipo_peca))).sort();
 
   const grupos = new Map<string, ReferencePhoto[]>();
   for (const r of rows) {
-    const chave = verDatas ? (r.data_comemorativa ?? "Outras datas") : r.tipo_peca;
+    const chave = r.categoria === "data_comemorativa" ? (r.data_comemorativa ?? "Outras datas") : r.tipo_peca;
     const grupo = grupos.get(chave) ?? [];
     grupo.push(r);
     grupos.set(chave, grupo);
@@ -148,6 +160,11 @@ export default async function CatalogoPage({
           Array.from(grupos.entries()).map(([tipoPeca, itens]) => (
             <section key={tipoPeca} className="mt-12">
               <SectionDivider label={tipoPeca} />
+              {tipoPeca === VOCE_MODELO_TIPO && (
+                <p className="mx-auto mt-4 w-fit rounded-full border border-brand-gold bg-brand-navy/5 px-4 py-1.5 text-center text-[11px] font-bold tracking-wide text-brand-navy uppercase">
+                  📎 Anexe 2 fotos: FOTO 1 (você) + FOTO 2 (sua joia)
+                </p>
+              )}
               <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5">
                 {itens.map((r) => (
                   <ReferenceCard key={r.id} reference={r} />

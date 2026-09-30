@@ -6,7 +6,13 @@ import Link from "next/link";
 const GEMINI_URL = "https://gemini.google.com/app";
 const CHATGPT_URL = "https://chat.openai.com/";
 
-export function CopyPromptCard({ prompt }: { prompt: string }) {
+export function CopyPromptCard({
+  prompt,
+  duasFotos = false,
+}: {
+  prompt: string;
+  duasFotos?: boolean;
+}) {
   const [copied, setCopied] = useState(false);
 
   async function handleCopy() {
@@ -45,7 +51,14 @@ export function CopyPromptCard({ prompt }: { prompt: string }) {
           <li>Copie o prompt acima</li>
           <li>Abra o Gemini ou o ChatGPT na sua conta pessoal</li>
           <li>Cole o prompt na conversa</li>
-          <li>Anexe a foto da sua peça (fundo neutro, boa luz)</li>
+          {duasFotos ? (
+            <>
+              <li>Anexe a FOTO 1: uma foto sua, com o rosto bem visível</li>
+              <li>Anexe a FOTO 2: a foto da sua joia (fundo neutro, boa luz)</li>
+            </>
+          ) : (
+            <li>Anexe a foto da sua peça (fundo neutro, boa luz)</li>
+          )}
           <li>Gere a imagem</li>
         </ol>
 

@@ -10,13 +10,15 @@ import sys
 import openpyxl
 
 XLSX_PATH = "content/Photo_Studio_TPV_Biblioteca_de_Prompts.xlsx"
-VERSAO = "v5"
+VERSAO = "v6"
 CHANGELOG = (
-    "v5: remove a categoria Relógio; Datas Comemorativas passou a ter "
-    "apenas 5 fotos por data (variando peça e cenário) em vez de 8; "
-    "adiciona a nova aba Expositores (still de joia sobre suporte de "
-    "exibição: busto, mão, orelha, correntes). Mantém a fidelidade de "
-    "quantidade e a checagem de anatomia da v4."
+    "v6: adiciona a nova aba Lifestyle (10 fotos com modelo genérica de "
+    "rosto completo, variando gênero e etnia, em cenas do dia a dia) e a "
+    "nova aba Peças em Você (10 fotos que usam DUAS fotos anexadas — o "
+    "rosto da própria assinante + a foto da joia — preservando a "
+    "identidade da assinante e usando exclusivamente as joias da segunda "
+    "foto). Mantém tudo da v5 (sem categoria Relógio, Datas Comemorativas "
+    "com 5 fotos/data, aba Expositores)."
 )
 SEP = "-" * 72
 DSEP = "=" * 72
@@ -65,6 +67,8 @@ def main():
     evergreen = rows_from(wb["Evergreen"], [])
     datas = rows_from(wb["Datas Comemorativas"], ["Data Comemorativa"])
     expositores = rows_from(wb["Expositores"], [])
+    lifestyle = rows_from(wb["Lifestyle"], [])
+    voce_modelo = rows_from(wb["Peças em Você"], [])
 
     lines = [
         f"PHOTO STUDIO TPV — PROMPTS PARA GERAR AS FOTOS-MESTRE NO GEMINI ({VERSAO})",
@@ -100,13 +104,28 @@ def main():
 
     lines += ["", HSEP, "# ABA: EXPOSITORES", HSEP, ""]
 
-    for n, item in enumerate(expositores, start=len(evergreen) + len(datas) + 1):
+    offset = len(evergreen) + len(datas)
+    for n, item in enumerate(expositores, start=offset + 1):
         render_item(lines, n, f"{item['tipo_peca']} — {item['pose']}", item)
+
+    lines += ["", HSEP, "# ABA: LIFESTYLE", HSEP, ""]
+
+    offset += len(expositores)
+    for n, item in enumerate(lifestyle, start=offset + 1):
+        render_item(lines, n, item["pose"], item)
+
+    lines += [
+        "", HSEP, "# ABA: PEÇAS EM VOCÊ (usa 2 fotos: sua foto + foto da joia)", HSEP, "",
+    ]
+
+    offset += len(lifestyle)
+    for n, item in enumerate(voce_modelo, start=offset + 1):
+        render_item(lines, n, item["pose"], item)
 
     with open(out_path, "w", encoding="utf-8") as f:
         f.write("\n".join(lines) + "\n")
 
-    total = len(evergreen) + len(datas) + len(expositores)
+    total = len(evergreen) + len(datas) + len(expositores) + len(lifestyle) + len(voce_modelo)
     print(f"OK: {total} prompts escritos em {out_path}")
 
 
