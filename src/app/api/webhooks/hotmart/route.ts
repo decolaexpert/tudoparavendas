@@ -8,23 +8,35 @@ import type { MemberStatus } from "@/lib/types";
  * Configuração na Hotmart: Ferramentas > Webhook > cadastrar
  *   URL: https://studio.tudoparavendas.com.br/api/webhooks/hotmart
  *   Eventos: PURCHASE_APPROVED, PURCHASE_COMPLETE, PURCHASE_REFUNDED,
- *            PURCHASE_CHARGEBACK, PURCHASE_CANCELED, SUBSCRIPTION_CANCELLATION
+ *            PURCHASE_CHARGEBACK, PURCHASE_CANCELED, PURCHASE_PROTEST,
+ *            PURCHASE_EXPIRED, SUBSCRIPTION_CANCELLATION
  *
  * A Hotmart permite configurar um "Hottok" (token) que é enviado no corpo
- * do payload (campo `hottok`). Validamos esse valor contra
- * HOTMART_WEBHOOK_TOKEN antes de processar qualquer coisa.
+ * do payload (campo `hottok`) e também no header `X-HOTMART-HOTTOK`.
+ * Validamos esse valor contra HOTMART_WEBHOOK_TOKEN antes de processar
+ * qualquer coisa.
+ *
+ * Produto é uma ASSINATURA RECORRENTE ANUAL: o Hotmart já controla a
+ * renovação e a expiração — nós só seguimos o status que ele manda, sem
+ * calcular data de expiração aqui. Ao cancelar a renovação, a assinante
+ * continua com acesso normalmente até o fim do ciclo já pago; o corte real
+ * só acontece quando chega PURCHASE_EXPIRED (fim do ciclo) ou um evento de
+ * reembolso/chargeback/contestação (corte imediato).
+ * SUBSCRIPTION_CANCELLATION é só um aviso de que não vai renovar — não
+ * revoga acesso por si só.
+ *
+ * Se HOTMART_PRODUCT_ID estiver configurado, eventos de qualquer outro
+ * produto da mesma conta Hotmart são ignorados (não tocam em `members`) —
+ * importante se a conta vender mais de um produto.
  *
  * Referência oficial: https://developers.hotmart.com/docs/pt-BR/webhooks/
  */
 
 const ACTIVE_EVENTS = new Set(["PURCHASE_APPROVED", "PURCHASE_COMPLETE"]);
-const REVOKE_EVENTS = new Set([
-  "PURCHASE_REFUNDED",
-  "PURCHASE_CHARGEBACK",
-  "PURCHASE_CANCELED",
-  "PURCHASE_PROTEST",
-  "SUBSCRIPTION_CANCELLATION",
-]);
+// Dinheiro devolvido ou contestado — corte imediato, fica marcado como "refunded".
+const REFUND_EVENTS = new Set(["PURCHASE_REFUNDED", "PURCHASE_CHARGEBACK", "PURCHASE_PROTEST"]);
+// Fim natural do ciclo pago (não renovou) — fica marcado como "inactive".
+const EXPIRE_EVENTS = new Set(["PURCHASE_EXPIRED", "PURCHASE_CANCELED"]);
 
 export async function POST(request: NextRequest) {
   const payload = await request.json().catch(() => null);
@@ -44,14 +56,32 @@ export async function POST(request: NextRequest) {
   const email: string | undefined = payload.data?.buyer?.email;
   const transactionId: string | undefined = payload.data?.purchase?.transaction;
   const subscriberCode: string | undefined = payload.data?.subscription?.subscriber?.code;
+  // O ID do produto vem em campos diferentes dependendo do evento: compras
+  // e renovações trazem `data.product.id`; o evento de cancelamento traz
+  // `data.subscription.product.id`.
+  const productId: string | number | undefined =
+    payload.data?.product?.id ?? payload.data?.subscription?.product?.id;
 
   if (!event || !email) {
     return NextResponse.json({ error: "missing_fields" }, { status: 400 });
   }
 
+  const expectedProductId = process.env.HOTMART_PRODUCT_ID;
+  if (expectedProductId && String(productId) !== expectedProductId) {
+    // Compra de outro produto da mesma conta Hotmart — não é deste sistema.
+    return NextResponse.json({ received: true, ignored_product: productId });
+  }
+
+  if (event === "SUBSCRIPTION_CANCELLATION") {
+    // Só avisa que não vai renovar; a assinante mantém acesso até o fim do
+    // ciclo já pago (o corte real chega depois via PURCHASE_EXPIRED).
+    return NextResponse.json({ received: true, acknowledged: event });
+  }
+
   let status: MemberStatus | null = null;
   if (ACTIVE_EVENTS.has(event)) status = "active";
-  else if (REVOKE_EVENTS.has(event)) status = "refunded";
+  else if (REFUND_EVENTS.has(event)) status = "refunded";
+  else if (EXPIRE_EVENTS.has(event)) status = "inactive";
 
   if (!status) {
     // Evento que não precisamos tratar (ex: PIX gerado mas não pago ainda).
