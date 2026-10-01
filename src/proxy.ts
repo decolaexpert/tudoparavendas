@@ -38,6 +38,28 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(loginUrl);
   }
 
+  // Sessão única por conta: se essa sessão não é mais a mais recente (a
+  // conta fez login em outro dispositivo depois), derruba essa aqui.
+  if (user && !isPublic && !isStaticAsset) {
+    const { data: claimsData } = await supabase.auth.getClaims();
+    const sessionId = claimsData?.claims.session_id;
+
+    if (sessionId) {
+      const { data: member } = await supabase
+        .from("members")
+        .select("active_session_id")
+        .eq("email", user.email)
+        .maybeSingle();
+
+      if (member?.active_session_id && member.active_session_id !== sessionId) {
+        await supabase.auth.signOut();
+        const loginUrl = new URL("/login", request.url);
+        loginUrl.searchParams.set("reason", "session_replaced");
+        return NextResponse.redirect(loginUrl);
+      }
+    }
+  }
+
   return response;
 }
 

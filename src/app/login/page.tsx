@@ -18,6 +18,7 @@ function LoginForm() {
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const searchParams = useSearchParams();
   const redirect = searchParams.get("redirect") ?? "/catalogo";
+  const sessionReplaced = searchParams.get("reason") === "session_replaced";
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -44,6 +45,13 @@ function LoginForm() {
         <p className="mt-4 text-sm text-zinc-500">
           Entre com o e-mail usado na compra do Clube Tudo para Vendas.
         </p>
+
+        {sessionReplaced && status !== "sent" && (
+          <p className="mt-4 rounded-lg bg-amber-50 px-4 py-3 text-sm text-amber-700">
+            Sua sessão foi encerrada porque esse acesso foi usado em outro
+            dispositivo. Entre novamente abaixo.
+          </p>
+        )}
 
         {status === "sent" ? (
           <p className="mt-6 rounded-lg bg-emerald-50 px-4 py-3 text-sm text-emerald-700">

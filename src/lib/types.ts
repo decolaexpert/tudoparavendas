@@ -8,6 +8,7 @@ export type Member = {
   status: MemberStatus;
   purchased_at: string | null;
   updated_at: string;
+  active_session_id: string | null;
 };
 
 export type ReferenceCategoria = "evergreen" | "data_comemorativa";
