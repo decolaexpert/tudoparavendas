@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getCurrentMember, hasActiveAccess } from "@/lib/member";
 import { Header } from "@/components/Header";
 import { NoAccess } from "@/components/NoAccess";
+import { CategoryTabs } from "@/components/CategoryTabs";
 import type { ReferencePhoto } from "@/lib/types";
 
 const PLACEHOLDER_THUMB = "/placeholder-reference.svg";
@@ -128,24 +129,21 @@ export default async function CatalogoPage({
         </div>
       </section>
 
-      <div className="sticky top-0 z-40 border-b border-zinc-200 bg-white">
-        <div className="mx-auto flex w-full max-w-[1400px] flex-wrap gap-1 px-4">
-          <TabLink label="Todos os tipos" active={!tipo} href="/catalogo" />
-          {tipos.map((t) => (
-            <TabLink
-              key={t}
-              label={t}
-              active={tipo === t}
-              href={`/catalogo?tipo=${encodeURIComponent(t)}`}
-            />
-          ))}
-          <TabLink
-            label="Datas Comemorativas"
-            active={verDatas}
-            href={`/catalogo?tipo=${DATAS_TIPO_VALUE}`}
-          />
-        </div>
-      </div>
+      <CategoryTabs
+        tabs={[
+          { label: "Todos os tipos", active: !tipo, href: "/catalogo" },
+          ...tipos.map((t) => ({
+            label: t,
+            active: tipo === t,
+            href: `/catalogo?tipo=${encodeURIComponent(t)}`,
+          })),
+          {
+            label: "Datas Comemorativas",
+            active: verDatas,
+            href: `/catalogo?tipo=${DATAS_TIPO_VALUE}`,
+          },
+        ]}
+      />
 
       <main className="mx-auto w-full max-w-[1400px] px-4 py-8">
         {rows.length === 0 ? (
@@ -207,22 +205,6 @@ function ReferenceCard({ reference: r }: { reference: ReferencePhoto }) {
         </p>
         <p className="mt-0.5 text-[11px] text-white/85">Clique para gerar sua foto</p>
       </div>
-    </Link>
-  );
-}
-
-function TabLink({ label, href, active }: { label: string; href: string; active: boolean }) {
-  return (
-    <Link
-      href={href}
-      className={[
-        "shrink-0 cursor-pointer border-b-2 px-3 py-3 text-xs font-bold whitespace-nowrap tracking-wide uppercase transition",
-        active
-          ? "border-brand-gold text-brand-navy"
-          : "border-transparent text-zinc-400 hover:text-brand-navy",
-      ].join(" ")}
-    >
-      {label}
     </Link>
   );
 }
