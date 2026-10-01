@@ -99,7 +99,7 @@ export default async function CatalogoPage({
     <>
       <Header />
 
-      <section className="bg-brand-navy">
+      <section className="hidden bg-brand-navy sm:block">
         <div className="mx-auto w-full max-w-[1400px] px-4 py-10 sm:py-14">
           <h1 className="flex flex-wrap items-center gap-3 text-3xl font-semibold text-white sm:text-4xl">
             Fotos profissionais para suas joias
