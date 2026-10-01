@@ -21,7 +21,7 @@ export default async function GerarPage({
   if (!hasActiveAccess(member)) {
     return (
       <>
-        <Header email={email} />
+        <Header />
         <NoAccess email={email} />
       </>
     );
@@ -39,7 +39,7 @@ export default async function GerarPage({
 
   return (
     <>
-      <Header email={email} />
+      <Header />
       <main className="mx-auto w-full max-w-4xl px-4 py-8">
         <div className="grid gap-8 sm:grid-cols-2">
           <div>

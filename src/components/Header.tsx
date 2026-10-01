@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 
-export function Header({ email }: { email?: string | null }) {
+export function Header() {
   return (
     <header className="border-b border-zinc-200 bg-white">
       <div className="bg-brand-blue px-4 py-1.5 text-center text-[10px] font-bold tracking-wide text-white sm:py-2 sm:text-xs">
@@ -22,7 +22,6 @@ export function Header({ email }: { email?: string | null }) {
           <Link href="/catalogo" className="cursor-pointer hover:text-brand-blue">
             Catálogo
           </Link>
-          {email && <span className="text-zinc-400">{email}</span>}
         </nav>
       </div>
     </header>

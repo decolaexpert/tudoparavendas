@@ -41,7 +41,7 @@ export default async function CatalogoPage({
   if (!hasActiveAccess(member)) {
     return (
       <>
-        <Header email={email} />
+        <Header />
         <NoAccess email={email} />
       </>
     );
@@ -97,7 +97,7 @@ export default async function CatalogoPage({
 
   return (
     <>
-      <Header email={email} />
+      <Header />
 
       <section className="bg-brand-navy">
         <div className="mx-auto w-full max-w-[1400px] px-4 py-10 sm:py-14">
