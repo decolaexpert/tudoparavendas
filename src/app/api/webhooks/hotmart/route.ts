@@ -53,16 +53,32 @@ export async function POST(request: NextRequest) {
   }
 
   const event: string | undefined = payload.event;
-  const email: string | undefined = payload.data?.buyer?.email;
+
+  if (!event) {
+    return NextResponse.json({ error: "missing_fields" }, { status: 400 });
+  }
+
+  if (event === "SUBSCRIPTION_CANCELLATION") {
+    // Só avisa que não vai renovar; a assinante mantém acesso até o fim do
+    // ciclo já pago (o corte real chega depois via PURCHASE_EXPIRED). Esse
+    // evento não grava nada, então não precisamos nem validar e-mail/produto.
+    return NextResponse.json({ received: true, acknowledged: event });
+  }
+
+  // O e-mail e o código da assinante vêm em campos diferentes dependendo do
+  // evento: compras/renovações trazem `data.buyer.email` e
+  // `data.subscription.subscriber.code`; outros eventos de assinatura trazem
+  // `data.subscriber.email` e `data.subscriber.code` direto na raiz de `data`.
+  const email: string | undefined = payload.data?.buyer?.email ?? payload.data?.subscriber?.email;
   const transactionId: string | undefined = payload.data?.purchase?.transaction;
-  const subscriberCode: string | undefined = payload.data?.subscription?.subscriber?.code;
-  // O ID do produto vem em campos diferentes dependendo do evento: compras
-  // e renovações trazem `data.product.id`; o evento de cancelamento traz
-  // `data.subscription.product.id`.
+  const subscriberCode: string | undefined =
+    payload.data?.subscription?.subscriber?.code ?? payload.data?.subscriber?.code;
+  // O ID do produto também varia: compras e renovações trazem
+  // `data.product.id`; eventos de assinatura trazem `data.subscription.product.id`.
   const productId: string | number | undefined =
     payload.data?.product?.id ?? payload.data?.subscription?.product?.id;
 
-  if (!event || !email) {
+  if (!email) {
     return NextResponse.json({ error: "missing_fields" }, { status: 400 });
   }
 
@@ -70,12 +86,6 @@ export async function POST(request: NextRequest) {
   if (expectedProductId && String(productId) !== expectedProductId) {
     // Compra de outro produto da mesma conta Hotmart — não é deste sistema.
     return NextResponse.json({ received: true, ignored_product: productId });
-  }
-
-  if (event === "SUBSCRIPTION_CANCELLATION") {
-    // Só avisa que não vai renovar; a assinante mantém acesso até o fim do
-    // ciclo já pago (o corte real chega depois via PURCHASE_EXPIRED).
-    return NextResponse.json({ received: true, acknowledged: event });
   }
 
   let status: MemberStatus | null = null;
