@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Gera um .txt legível (pra copiar e colar no Gemini/ChatGPT) a partir de
-content/Photo_Studio_TPV_Biblioteca_de_Prompts.xlsx.
+content/TPV_Studio_Biblioteca_de_Prompts.xlsx.
 
 Uso (depois de rodar scripts/build_prompt_library.py):
     python3 scripts/gen_txt_library.py [caminho_de_saida.txt]
@@ -9,7 +9,7 @@ Uso (depois de rodar scripts/build_prompt_library.py):
 import sys
 import openpyxl
 
-XLSX_PATH = "content/Photo_Studio_TPV_Biblioteca_de_Prompts.xlsx"
+XLSX_PATH = "content/TPV_Studio_Biblioteca_de_Prompts.xlsx"
 VERSAO = "v6"
 CHANGELOG = (
     "v6: adiciona a nova aba Lifestyle (10 fotos com modelo genérica de "
@@ -61,7 +61,7 @@ def render_item(lines, n, titulo, item):
 
 
 def main():
-    out_path = sys.argv[1] if len(sys.argv) > 1 else "Prompts_Gemini_Photo_Studio_TPV.txt"
+    out_path = sys.argv[1] if len(sys.argv) > 1 else "Prompts_Gemini_TPV_Studio.txt"
 
     wb = openpyxl.load_workbook(XLSX_PATH, data_only=True)
     evergreen = rows_from(wb["Evergreen"], [])
@@ -71,7 +71,7 @@ def main():
     voce_modelo = rows_from(wb["Peças em Você"], [])
 
     lines = [
-        f"PHOTO STUDIO TPV — PROMPTS PARA GERAR AS FOTOS-MESTRE NO GEMINI ({VERSAO})",
+        f"TUDO PARA VENDAS | STUDIO — PROMPTS PARA GERAR AS FOTOS-MESTRE NO GEMINI ({VERSAO})",
         DSEP,
         "",
         CHANGELOG,

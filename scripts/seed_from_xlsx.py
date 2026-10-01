@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Lê content/Photo_Studio_TPV_Biblioteca_de_Prompts.xlsx e gera
+Lê content/TPV_Studio_Biblioteca_de_Prompts.xlsx e gera
 supabase/seed.sql com um INSERT por linha das abas Evergreen e
 Datas Comemorativas, na tabela reference_photos.
 
@@ -14,7 +14,7 @@ Uso:
 """
 import openpyxl
 
-XLSX_PATH = "content/Photo_Studio_TPV_Biblioteca_de_Prompts.xlsx"
+XLSX_PATH = "content/TPV_Studio_Biblioteca_de_Prompts.xlsx"
 OUT_PATH = "supabase/seed.sql"
 
 
@@ -131,7 +131,7 @@ def main():
 
     lines = [
         "-- Gerado automaticamente por scripts/seed_from_xlsx.py",
-        "-- Fonte: content/Photo_Studio_TPV_Biblioteca_de_Prompts.xlsx",
+        "-- Fonte: content/TPV_Studio_Biblioteca_de_Prompts.xlsx",
         "-- Não editar à mão — rode o script de novo após atualizar a planilha.",
         "",
     ]

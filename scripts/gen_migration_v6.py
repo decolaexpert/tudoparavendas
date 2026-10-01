@@ -15,7 +15,7 @@ import math
 import os
 import openpyxl
 
-XLSX_PATH = "content/Photo_Studio_TPV_Biblioteca_de_Prompts.xlsx"
+XLSX_PATH = "content/TPV_Studio_Biblioteca_de_Prompts.xlsx"
 OUT_DIR = "supabase/migration_v6"
 ROWS_PER_FILE = 8
 

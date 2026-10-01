@@ -1,4 +1,4 @@
-PHOTO STUDIO TPV — PROMPTS PARA GERAR AS FOTOS-MESTRE NO GEMINI (v6)
+TUDO PARA VENDAS | STUDIO — PROMPTS PARA GERAR AS FOTOS-MESTRE NO GEMINI (v6)
 ========================================================================
 
 v6: adiciona a nova aba Lifestyle (10 fotos com modelo genérica de rosto completo, variando gênero e etnia, em cenas do dia a dia) e a nova aba Peças em Você (10 fotos que usam DUAS fotos anexadas — o rosto da própria assinante + a foto da joia — preservando a identidade da assinante e usando exclusivamente as joias da segunda foto). Mantém tudo da v5 (sem categoria Relógio, Datas Comemorativas com 5 fotos/data, aba Expositores).

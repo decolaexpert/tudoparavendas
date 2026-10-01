@@ -14,7 +14,7 @@ const dancingScript = Dancing_Script({
 });
 
 export const metadata: Metadata = {
-  title: "Photo Studio TPV",
+  title: "Tudo para Vendas | Studio",
   description: "Fotos profissionais de semijoias com IA, sem alterar a peça original.",
 };
 

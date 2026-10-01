@@ -1,4 +1,4 @@
-# Photo Studio TPV
+# Tudo para Vendas | Studio
 
 Ferramenta de fotos de semijoias com IA do Clube Tudo para Vendas.
 A cliente escolhe um estilo de foto no catálogo e copia o prompt mestre

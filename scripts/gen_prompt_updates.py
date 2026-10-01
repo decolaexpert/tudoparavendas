@@ -11,7 +11,7 @@ Uso (depois de rodar scripts/build_prompt_library.py):
 import math
 import openpyxl
 
-XLSX_PATH = "content/Photo_Studio_TPV_Biblioteca_de_Prompts.xlsx"
+XLSX_PATH = "content/TPV_Studio_Biblioteca_de_Prompts.xlsx"
 OUT_DIR = "supabase/prompt_updates"
 ROWS_PER_FILE = 8
 

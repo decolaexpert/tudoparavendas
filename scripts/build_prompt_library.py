@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Gera content/Photo_Studio_TPV_Biblioteca_de_Prompts.xlsx — v2.
+Gera content/TPV_Studio_Biblioteca_de_Prompts.xlsx — v2.
 
 Reescrito a partir de prompts reais extraídos do concorrente (Studio
 Pablita), aplicando os padrões observados: física de equilíbrio/gravidade,
@@ -975,7 +975,7 @@ def autofit(ws, widths):
 ws0 = wb.active
 ws0.title = "Instruções"
 ws0.sheet_view.showGridLines = False
-ws0["B2"] = "Photo Studio TPV — Biblioteca de Prompts (v2)"
+ws0["B2"] = "Tudo para Vendas | Studio — Biblioteca de Prompts (v2)"
 ws0["B2"].font = TITLE_FONT
 ws0["B3"] = "Reescrita com base em prompts reais do concorrente (Studio Pablita)"
 ws0["B3"].font = SUB_FONT
@@ -1113,7 +1113,7 @@ for r_i in range(2, ws5.max_row + 1):
 ws5.freeze_panes = "A2"
 ws5.auto_filter.ref = ws5.dimensions
 
-out_path = "content/Photo_Studio_TPV_Biblioteca_de_Prompts.xlsx"
+out_path = "content/TPV_Studio_Biblioteca_de_Prompts.xlsx"
 wb.save(out_path)
 print("OK:", out_path)
 print("Evergreen rows:", len(rows_evergreen))
