@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import type { ReferencePhoto } from "@/lib/types";
+import { ImageSpinner } from "@/components/ImageSpinner";
 
 const PLACEHOLDER_THUMB = "/placeholder-reference.svg";
 const GEMINI_URL = "https://gemini.google.com/app";
@@ -89,6 +90,7 @@ function PromptModalContent({
           >
             ✕
           </button>
+          <ImageSpinner />
           <Image
             src={reference.thumbnail_url || PLACEHOLDER_THUMB}
             alt={reference.nome_referencia}
