@@ -5,6 +5,7 @@ import { getCurrentMember, hasActiveAccess } from "@/lib/member";
 import { Header } from "@/components/Header";
 import { NoAccess } from "@/components/NoAccess";
 import { CategoryTabs } from "@/components/CategoryTabs";
+import { ImageSpinner } from "@/components/ImageSpinner";
 import type { ReferencePhoto } from "@/lib/types";
 
 const PLACEHOLDER_THUMB = "/placeholder-reference.svg";
@@ -198,6 +199,7 @@ function ReferenceCard({ reference: r }: { reference: ReferencePhoto }) {
       className="group block cursor-pointer overflow-hidden rounded-xl border border-zinc-200 bg-white transition hover:shadow-lg"
     >
       <div className="relative aspect-[4/5] w-full overflow-hidden bg-zinc-100">
+        <ImageSpinner />
         <Image
           src={r.thumbnail_url || PLACEHOLDER_THUMB}
           alt={r.nome_referencia}

@@ -5,6 +5,7 @@ import { getCurrentMember, hasActiveAccess } from "@/lib/member";
 import { Header } from "@/components/Header";
 import { NoAccess } from "@/components/NoAccess";
 import { CopyPromptCard } from "@/components/CopyPromptCard";
+import { ImageSpinner } from "@/components/ImageSpinner";
 
 const PLACEHOLDER_THUMB = "/placeholder-reference.svg";
 const VOCE_MODELO_TIPO = "Peças em Você";
@@ -44,6 +45,7 @@ export default async function GerarPage({
         <div className="grid gap-8 sm:grid-cols-2">
           <div>
             <div className="relative aspect-square w-full overflow-hidden rounded-xl bg-zinc-100">
+              <ImageSpinner />
               <Image
                 src={reference.thumbnail_url || PLACEHOLDER_THUMB}
                 alt={reference.nome_referencia}
