@@ -9,6 +9,8 @@ import type { ReferencePhoto } from "@/lib/types";
 
 const PLACEHOLDER_THUMB = "/placeholder-reference.svg";
 const DATAS_TIPO_VALUE = "datas-comemorativas";
+const TODOS_TIPO_VALUE = "todos";
+const DEFAULT_TIPO = "Lifestyle";
 const VOCE_MODELO_TIPO = "Peças em Você";
 
 const PASSOS = [
@@ -49,6 +51,11 @@ export default async function CatalogoPage({
 
   const { tipo } = await searchParams;
   const verDatas = tipo === DATAS_TIPO_VALUE;
+  const verTodos = tipo === TODOS_TIPO_VALUE;
+  // Sem filtro na URL, carrega só a Lifestyle por padrão — bem mais leve do
+  // que trazer o catálogo inteiro de cara. As outras categorias só buscam
+  // dados quando a pessoa clica no menu.
+  const tipoAtivo = !tipo || verDatas || verTodos ? DEFAULT_TIPO : tipo;
   const supabase = await createClient();
 
   const base = () => supabase.from("reference_photos").select("*").eq("status", "aprovado");
@@ -58,22 +65,22 @@ export default async function CatalogoPage({
       const { data } = await base().eq("categoria", "data_comemorativa").order("ordem");
       return (data ?? []) as ReferencePhoto[];
     }
-    if (tipo) {
-      const { data } = await base()
-        .eq("categoria", "evergreen")
-        .eq("tipo_peca", tipo)
-        .order("ordem");
-      return (data ?? []) as ReferencePhoto[];
+    if (verTodos) {
+      // "Todos os tipos": evergreen inteiro + datas comemorativas inteiras, tudo aberto.
+      const [evergreen, datas] = await Promise.all([
+        base().eq("categoria", "evergreen").order("tipo_peca").order("ordem"),
+        base().eq("categoria", "data_comemorativa").order("ordem"),
+      ]);
+      return [
+        ...((evergreen.data ?? []) as ReferencePhoto[]),
+        ...((datas.data ?? []) as ReferencePhoto[]),
+      ];
     }
-    // "Todos os tipos": evergreen inteiro + datas comemorativas inteiras, tudo aberto.
-    const [evergreen, datas] = await Promise.all([
-      base().eq("categoria", "evergreen").order("tipo_peca").order("ordem"),
-      base().eq("categoria", "data_comemorativa").order("ordem"),
-    ]);
-    return [
-      ...((evergreen.data ?? []) as ReferencePhoto[]),
-      ...((datas.data ?? []) as ReferencePhoto[]),
-    ];
+    const { data } = await base()
+      .eq("categoria", "evergreen")
+      .eq("tipo_peca", tipoAtivo)
+      .order("ordem");
+    return (data ?? []) as ReferencePhoto[];
   }
 
   const [rows, { data: filtrosData }] = await Promise.all([
@@ -131,10 +138,10 @@ export default async function CatalogoPage({
 
       <CategoryTabs
         tabs={[
-          { label: "Todos os tipos", active: !tipo, href: "/catalogo" },
+          { label: "Todos os tipos", active: verTodos, href: `/catalogo?tipo=${TODOS_TIPO_VALUE}` },
           ...tipos.map((t) => ({
             label: t,
-            active: tipo === t,
+            active: !verDatas && !verTodos && tipoAtivo === t,
             href: `/catalogo?tipo=${encodeURIComponent(t)}`,
           })),
           {
