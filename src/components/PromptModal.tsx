@@ -76,7 +76,7 @@ function PromptModalContent({
         <button
           onClick={onClose}
           aria-label="Fechar"
-          className="absolute top-3 right-3 z-10 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-white/90 text-zinc-500 shadow hover:text-brand-black sm:hidden"
+          className="absolute top-3 right-3 z-10 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-brand-blue text-white shadow hover:opacity-90 sm:hidden"
         >
           ✕
         </button>
@@ -85,7 +85,7 @@ function PromptModalContent({
           <button
             onClick={onClose}
             aria-label="Fechar"
-            className="absolute top-3 right-3 z-10 hidden h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-white/90 text-zinc-500 shadow hover:text-brand-black sm:flex"
+            className="absolute top-3 right-3 z-10 hidden h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-brand-blue text-white shadow hover:opacity-90 sm:flex"
           >
             ✕
           </button>
