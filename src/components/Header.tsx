@@ -20,7 +20,10 @@ export function Header() {
         </Link>
         <nav className="flex items-center gap-6 text-sm text-zinc-600">
           <Link href="/catalogo" className="cursor-pointer hover:text-brand-blue">
-            Catálogo
+            Studio Photo
+          </Link>
+          <Link href="/video" className="cursor-pointer hover:text-brand-blue">
+            Studio Video
           </Link>
         </nav>
       </div>
