@@ -13,7 +13,7 @@ export function Header() {
       </div>
       <div className="mx-auto flex w-full max-w-[1400px] items-center justify-between px-4 py-4">
         <Link href="/catalogo" className="flex cursor-pointer items-center gap-2">
-          <Image src="/logo.webp" alt="Tudo para Vendas" width={180} height={32} priority />
+          <Image src="/logo.png" alt="Tudo para Vendas" width={180} height={32} priority />
           <span className="hidden font-script text-3xl text-brand-black sm:inline">
             Studio
           </span>

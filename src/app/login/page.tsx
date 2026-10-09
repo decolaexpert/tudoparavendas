@@ -39,7 +39,7 @@ function LoginForm() {
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 px-4">
       <div className="w-full max-w-sm rounded-2xl border border-zinc-200 bg-white p-8 shadow-sm">
         <div className="flex items-center justify-center gap-2">
-          <Image src="/logo.webp" alt="Tudo para Vendas" width={160} height={29} priority />
+          <Image src="/logo.png" alt="Tudo para Vendas" width={160} height={29} priority />
           <span className="font-script text-3xl text-brand-black">Studio</span>
         </div>
         <p className="mt-4 text-center text-sm text-zinc-500">
