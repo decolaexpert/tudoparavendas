@@ -18,11 +18,17 @@ export function Header() {
             Studio
           </span>
         </Link>
-        <nav className="flex items-center gap-6 text-sm text-zinc-600">
-          <Link href="/catalogo" className="cursor-pointer hover:text-brand-blue">
+        <nav className="flex items-center gap-2 text-sm">
+          <Link
+            href="/catalogo"
+            className="cursor-pointer rounded-full bg-brand-blue px-4 py-1.5 font-medium text-white transition hover:opacity-90"
+          >
             Studio Photo
           </Link>
-          <Link href="/video" className="cursor-pointer hover:text-brand-blue">
+          <Link
+            href="/video"
+            className="cursor-pointer rounded-full bg-brand-blue px-4 py-1.5 font-medium text-white transition hover:opacity-90"
+          >
             Studio Video
           </Link>
         </nav>
