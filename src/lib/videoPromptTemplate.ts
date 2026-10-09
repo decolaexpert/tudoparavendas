@@ -8,6 +8,7 @@ export type VideoFieldOption = { label: string; value: string };
 export type VideoField = {
   id: string;
   label: string;
+  description: string;
   options: VideoFieldOption[];
 };
 
@@ -17,6 +18,8 @@ export type VideoFieldGroup = {
 };
 
 export const FALA_FIELD_ID = "FALA";
+export const VOZ_FIELD_ID = "VOZ";
+export const ESTILO_APRESENTACAO_FIELD_ID = "ESTILO_APRESENTACAO";
 export const OBSERVACAO_FIELD_ID = "OBSERVACAO";
 
 export const FIELD_GROUPS: VideoFieldGroup[] = [
@@ -26,6 +29,7 @@ export const FIELD_GROUPS: VideoFieldGroup[] = [
       {
         id: "JOIAS_ANEXADAS",
         label: "O que você vai anexar",
+        description: "Escolha o tipo de peça que você vai anexar na conversa com a IA (brinco, colar, anel etc).",
         options: [
           { label: "Brinco", value: "Um par de brincos, visíveis com clareza na fotografia anexada." },
           { label: "Colar", value: "Um colar, visível com clareza na fotografia anexada." },
@@ -47,6 +51,7 @@ export const FIELD_GROUPS: VideoFieldGroup[] = [
       {
         id: "QUANTIDADE",
         label: "Quantidade exata de unidades",
+        description: "Quantas unidades da joia aparecem na foto que você vai anexar.",
         options: [
           { label: "1 peça", value: "1 unidade." },
           { label: "2 peças (par)", value: "2 unidades (par)." },
@@ -58,6 +63,7 @@ export const FIELD_GROUPS: VideoFieldGroup[] = [
       {
         id: "CARACTERISTICAS",
         label: "Características visuais",
+        description: "Cor do metal e se a peça tem pedras, pérolas ou cristais visíveis.",
         options: [
           { label: "Dourado liso e brilhante", value: "Metal dourado liso e brilhante, sem pedras." },
           { label: "Dourado cravejado com pedras", value: "Metal dourado cravejado com pedras visíveis." },
@@ -72,6 +78,7 @@ export const FIELD_GROUPS: VideoFieldGroup[] = [
       {
         id: "COMO_USAR",
         label: "Como a modelo deve usar/segurar",
+        description: "Onde a modelo vai usar ou como vai segurar a joia durante o vídeo.",
         options: [
           { label: "Na orelha (brinco)", value: "Usada na orelha, visível com clareza." },
           { label: "No pescoço (colar/corrente)", value: "Usada no pescoço, visível com clareza." },
@@ -84,6 +91,7 @@ export const FIELD_GROUPS: VideoFieldGroup[] = [
       {
         id: "PECA_PRINCIPAL",
         label: "Peça principal a destacar",
+        description: "Se você anexar mais de uma peça, qual delas deve ganhar mais destaque no vídeo.",
         options: [
           { label: "A única peça anexada", value: "A única peça presente na fotografia anexada." },
           { label: "A peça maior/mais chamativa", value: "A peça de maior destaque visual entre as anexadas." },
@@ -102,6 +110,7 @@ export const FIELD_GROUPS: VideoFieldGroup[] = [
       {
         id: "SEXO",
         label: "Sexo/apresentação visual",
+        description: "Se a modelo do vídeo será mulher, homem ou apresentação andrógina/neutra.",
         options: [
           { label: "Mulher", value: "Mulher." },
           { label: "Homem", value: "Homem." },
@@ -111,6 +120,7 @@ export const FIELD_GROUPS: VideoFieldGroup[] = [
       {
         id: "APARENCIA",
         label: "Aparência e nacionalidade visual",
+        description: "Aparência geral e tom de pele da modelo, de forma resumida.",
         options: [
           { label: "Brasileira, aparência natural", value: "Mulher brasileira com aparência natural, sem exageros de produção." },
           { label: "Brasileira morena", value: "Mulher brasileira morena, aparência natural." },
@@ -122,6 +132,7 @@ export const FIELD_GROUPS: VideoFieldGroup[] = [
       {
         id: "IDADE",
         label: "Idade aparente",
+        description: "Faixa de idade aparente da modelo no vídeo.",
         options: [
           { label: "18–24 anos", value: "Entre 18 e 24 anos." },
           { label: "25–34 anos", value: "Entre 25 e 34 anos." },
@@ -132,6 +143,7 @@ export const FIELD_GROUPS: VideoFieldGroup[] = [
       {
         id: "TOM_PELE",
         label: "Tom de pele",
+        description: "Tom de pele da modelo.",
         options: [
           { label: "Muito clara", value: "Muito clara." },
           { label: "Clara", value: "Clara." },
@@ -143,6 +155,7 @@ export const FIELD_GROUPS: VideoFieldGroup[] = [
       {
         id: "ROSTO",
         label: "Características do rosto",
+        description: "Formato do rosto e estilo de maquiagem da modelo.",
         options: [
           { label: "Oval, traços suaves, maquiagem leve", value: "Rosto oval, traços suaves, maquiagem leve e natural." },
           { label: "Alongado, maquiagem natural", value: "Rosto alongado, maquiagem natural." },
@@ -153,6 +166,7 @@ export const FIELD_GROUPS: VideoFieldGroup[] = [
       {
         id: "CABELO",
         label: "Cabelo",
+        description: "Corte, textura e como o cabelo aparece no vídeo (solto, preso etc).",
         options: [
           { label: "Liso e solto, altura dos ombros", value: "Liso, solto, na altura dos ombros." },
           { label: "Cacheado e volumoso, solto", value: "Cacheado, volumoso, solto." },
@@ -164,6 +178,7 @@ export const FIELD_GROUPS: VideoFieldGroup[] = [
       {
         id: "VESTUARIO",
         label: "Vestuário",
+        description: "Roupa que a modelo vai usar na cena.",
         options: [
           { label: "Blusa branca básica, decote discreto", value: "Blusa branca básica, decote discreto." },
           { label: "Vestido preto elegante, decote em V", value: "Vestido preto elegante, decote em V." },
@@ -175,6 +190,7 @@ export const FIELD_GROUPS: VideoFieldGroup[] = [
       {
         id: "UNHAS",
         label: "Unhas",
+        description: "Formato e cor do esmalte das unhas da modelo.",
         options: [
           { label: "Curtas, naturais, esmalte nude", value: "Curtas, formato natural, esmalte nude." },
           { label: "Médias, amendoadas, esmalte vermelho", value: "Médias, formato amendoado, esmalte vermelho." },
@@ -185,6 +201,7 @@ export const FIELD_GROUPS: VideoFieldGroup[] = [
       {
         id: "PERSONALIDADE",
         label: "Personalidade e expressão",
+        description: "Personalidade e expressão que a modelo deve transmitir.",
         options: [
           { label: "Elegante e discreta", value: "Elegante e discreta." },
           { label: "Simpática e espontânea", value: "Simpática e espontânea." },
@@ -200,6 +217,7 @@ export const FIELD_GROUPS: VideoFieldGroup[] = [
       {
         id: "LOCAL",
         label: "Local da gravação",
+        description: "Cômodo ou local onde a cena deve acontecer.",
         options: [
           { label: "Quarto", value: "Quarto." },
           { label: "Closet", value: "Closet." },
@@ -213,6 +231,7 @@ export const FIELD_GROUPS: VideoFieldGroup[] = [
       {
         id: "ESTILO_AMBIENTE",
         label: "Estilo do ambiente",
+        description: "Estilo geral da decoração do ambiente.",
         options: [
           { label: "Minimalista", value: "Minimalista." },
           { label: "Luxuoso", value: "Luxuoso." },
@@ -224,6 +243,7 @@ export const FIELD_GROUPS: VideoFieldGroup[] = [
       {
         id: "CORES_CENARIO",
         label: "Cores predominantes do cenário",
+        description: "Paleta de cores predominante no cenário de fundo.",
         options: [
           { label: "Tons neutros (branco, bege, cinza)", value: "Tons neutros — branco, bege e cinza." },
           { label: "Tons terrosos (marrom, caramelo)", value: "Tons terrosos — marrom e caramelo." },
@@ -235,6 +255,7 @@ export const FIELD_GROUPS: VideoFieldGroup[] = [
       {
         id: "ELEMENTOS_FUNDO",
         label: "Elementos de fundo",
+        description: "O que aparece desfocado atrás da modelo.",
         options: [
           { label: "Nenhum elemento, ambiente limpo", value: "Nenhum elemento adicional, ambiente limpo." },
           { label: "Espelho desfocado ao fundo", value: "Um espelho desfocado ao fundo." },
@@ -246,6 +267,7 @@ export const FIELD_GROUPS: VideoFieldGroup[] = [
       {
         id: "PROFUNDIDADE",
         label: "Profundidade de campo",
+        description: "O quanto o fundo fica nítido ou desfocado em relação à modelo.",
         options: [
           { label: "Fundo nítido", value: "Fundo nítido." },
           { label: "Fundo levemente desfocado", value: "Fundo levemente desfocado." },
@@ -260,6 +282,7 @@ export const FIELD_GROUPS: VideoFieldGroup[] = [
       {
         id: "TEMPERATURA_LUZ",
         label: "Temperatura da luz",
+        description: "Se a luz da cena é mais quente (amarelada), neutra ou fria (azulada).",
         options: [
           { label: "Quente", value: "Quente." },
           { label: "Neutra", value: "Neutra." },
@@ -269,6 +292,7 @@ export const FIELD_GROUPS: VideoFieldGroup[] = [
       {
         id: "FONTE_LUZ",
         label: "Fonte de iluminação",
+        description: "De onde vem a luz principal da cena.",
         options: [
           { label: "Luz natural de janela", value: "Luz natural de janela." },
           { label: "Softbox", value: "Softbox." },
@@ -279,6 +303,7 @@ export const FIELD_GROUPS: VideoFieldGroup[] = [
       {
         id: "INTENSIDADE",
         label: "Intensidade",
+        description: "O quão forte é a luz na cena.",
         options: [
           { label: "Suave", value: "Suave." },
           { label: "Moderada", value: "Moderada." },
@@ -288,6 +313,7 @@ export const FIELD_GROUPS: VideoFieldGroup[] = [
       {
         id: "DIRECAO_LUZ",
         label: "Direção da luz",
+        description: "De que ângulo a luz incide sobre a modelo.",
         options: [
           { label: "Frontal", value: "Frontal." },
           { label: "Lateral", value: "Lateral." },
@@ -297,6 +323,7 @@ export const FIELD_GROUPS: VideoFieldGroup[] = [
       {
         id: "CONTRASTE",
         label: "Contraste",
+        description: "Diferença entre as áreas claras e escuras da imagem.",
         options: [
           { label: "Baixo", value: "Baixo." },
           { label: "Médio", value: "Médio." },
@@ -306,6 +333,7 @@ export const FIELD_GROUPS: VideoFieldGroup[] = [
       {
         id: "ESTETICA",
         label: "Estética final",
+        description: "O acabamento visual geral do vídeo (mais natural, mais produzido etc).",
         options: [
           { label: "Natural", value: "Natural." },
           { label: "Premium", value: "Premium." },
@@ -322,6 +350,7 @@ export const FIELD_GROUPS: VideoFieldGroup[] = [
       {
         id: "ENQUADRAMENTO_INICIAL",
         label: "Enquadramento inicial",
+        description: "Como a cena começa — o que a câmera mostra nos primeiros instantes.",
         options: [
           { label: "Plano médio", value: "Plano médio." },
           { label: "Close do rosto", value: "Close do rosto." },
@@ -332,6 +361,7 @@ export const FIELD_GROUPS: VideoFieldGroup[] = [
       {
         id: "MOVIMENTO_CAMERA",
         label: "Movimento de câmera",
+        description: "Se a câmera fica parada ou se movimenta durante a gravação.",
         options: [
           { label: "Câmera estática", value: "Câmera estática." },
           { label: "Leve movimento de mão", value: "Leve movimento de mão." },
@@ -342,6 +372,7 @@ export const FIELD_GROUPS: VideoFieldGroup[] = [
       {
         id: "DEMONSTRACAO",
         label: "Como demonstrar o produto",
+        description: "O gesto que a modelo faz pra mostrar a joia de perto.",
         options: [
           { label: "Tocando delicadamente a peça usada no corpo", value: "A modelo toca delicadamente a peça usada no corpo, revelando seus detalhes." },
           { label: "Girando a joia levemente entre os dedos", value: "A modelo gira levemente a joia entre os dedos, revelando seus detalhes." },
@@ -352,6 +383,7 @@ export const FIELD_GROUPS: VideoFieldGroup[] = [
       {
         id: "ENQUADRAMENTO_FINAL",
         label: "Enquadramento final",
+        description: "Como a cena termina — o último plano mostrado.",
         options: [
           { label: "Close da joia", value: "Close da joia." },
           { label: "Modelo olhando para a câmera", value: "Modelo olhando diretamente para a câmera." },
@@ -364,8 +396,9 @@ export const FIELD_GROUPS: VideoFieldGroup[] = [
     title: "Fala da modelo",
     fields: [
       {
-        id: "VOZ",
+        id: VOZ_FIELD_ID,
         label: "Características da voz",
+        description: "Como a voz da modelo deve soar. Só é usado quando o vídeo tem fala.",
         options: [
           { label: "Feminina, suave e jovem", value: "Feminina, suave e jovem." },
           { label: "Feminina, confiante e sofisticada", value: "Feminina, confiante e sofisticada." },
@@ -374,8 +407,9 @@ export const FIELD_GROUPS: VideoFieldGroup[] = [
         ],
       },
       {
-        id: "ESTILO_APRESENTACAO",
+        id: ESTILO_APRESENTACAO_FIELD_ID,
         label: "Estilo de apresentação",
+        description: "O tom da fala — se é mais espontânea, uma recomendação etc. Só é usado quando o vídeo tem fala.",
         options: [
           { label: "Conversa espontânea", value: "Conversa espontânea." },
           { label: "Recomendação", value: "Recomendação." },
@@ -391,6 +425,7 @@ export const FIELD_GROUPS: VideoFieldGroup[] = [
       {
         id: "TRILHA",
         label: "Trilha sonora",
+        description: "Se o vídeo deve ter música de fundo ou não.",
         options: [
           { label: "Sem música", value: "Sem música." },
           { label: "Música instrumental suave", value: "Música instrumental suave, em volume baixo." },
@@ -399,6 +434,7 @@ export const FIELD_GROUPS: VideoFieldGroup[] = [
       {
         id: "SOM_AMBIENTE",
         label: "Som ambiente",
+        description: "Se deve haver som ambiente sutil ou silêncio controlado.",
         options: [
           { label: "Silêncio controlado", value: "Silêncio controlado." },
           { label: "Ambiente natural", value: "Ambiente natural, discreto." },
@@ -628,24 +664,7 @@ Adapte os tempos à ação escolhida, mantendo o vídeo dentro de oito segundos.
 
 9. FALA DA MODELO EM PORTUGUÊS BRASILEIRO
 
-Fala exata:
-{{FALA}}
-
-A fala deve ser pronunciada em português brasileiro natural, com sotaque brasileiro autêntico, dicção clara e entonação espontânea de uma criadora de conteúdo apresentando um produto.
-
-Duração máxima da fala: 8 segundos.
-
-Não traduza, reformule ou acrescente palavras à frase fornecida. Não invente informações sobre material, composição, banho, pedras, preço, durabilidade, garantia ou propriedades da joia.
-
-A sincronia labial deve acompanhar precisamente as palavras pronunciadas. A voz deve combinar com a aparência e a idade da modelo.
-
-Se a fala não preencher os oito segundos, mantenha pausas naturais e continue a demonstração visual, sem adicionar frases.
-
-Características da voz:
-{{VOZ}}
-
-Estilo de apresentação:
-{{ESTILO_APRESENTACAO}}
+{{FALA_BLOCO}}
 
 ⸻
 
@@ -699,16 +718,55 @@ Não improvise, não embeleze artificialmente e não redesenhe as joias. Utilize
 
 Gere o vídeo UGC vertical de oito segundos seguindo todas as instruções acima e respeitando os campos preenchidos pelo usuário.{{OBSERVACAO_SECTION}}`;
 
-export function buildVideoPrompt(values: Record<string, string>, observacao: string): string {
+const FALA_BLOCO_COM_FALA = (fala: string, voz: string, estiloApresentacao: string) =>
+  `Fala exata:
+${fala}
+
+A fala deve ser pronunciada em português brasileiro natural, com sotaque brasileiro autêntico, dicção clara e entonação espontânea de uma criadora de conteúdo apresentando um produto.
+
+Duração máxima da fala: 8 segundos.
+
+Não traduza, reformule ou acrescente palavras à frase fornecida. Não invente informações sobre material, composição, banho, pedras, preço, durabilidade, garantia ou propriedades da joia.
+
+A sincronia labial deve acompanhar precisamente as palavras pronunciadas. A voz deve combinar com a aparência e a idade da modelo.
+
+Se a fala não preencher os oito segundos, mantenha pausas naturais e continue a demonstração visual, sem adicionar frases.
+
+Características da voz:
+${voz}
+
+Estilo de apresentação:
+${estiloApresentacao}`;
+
+const FALA_BLOCO_SEM_FALA = `Este vídeo não tem fala. A modelo não pronuncia nenhuma palavra durante toda a cena.
+
+Mantenha a expressão facial natural, convidativa e espontânea, comunicando através de gestos e do olhar, sem simular fala, dublagem ou sincronia labial.
+
+Não gere áudio de voz, narração, legendas com texto falado ou qualquer tipo de sincronia labial.`;
+
+export function buildVideoPrompt(
+  values: Record<string, string>,
+  observacao: string,
+  comFala: boolean,
+): string {
   let result = VIDEO_PROMPT_TEMPLATE;
   for (const group of FIELD_GROUPS) {
     for (const field of group.fields) {
+      if (field.id === VOZ_FIELD_ID || field.id === ESTILO_APRESENTACAO_FIELD_ID) continue;
       const token = `{{${field.id}}}`;
       const value = values[field.id] ?? "";
       result = result.split(token).join(value);
     }
   }
-  result = result.split(`{{${FALA_FIELD_ID}}}`).join(values[FALA_FIELD_ID] ?? "");
+
+  const falaBloco = comFala
+    ? FALA_BLOCO_COM_FALA(
+        values[FALA_FIELD_ID] ?? "",
+        values[VOZ_FIELD_ID] ?? "",
+        values[ESTILO_APRESENTACAO_FIELD_ID] ?? "",
+      )
+    : FALA_BLOCO_SEM_FALA;
+  result = result.split("{{FALA_BLOCO}}").join(falaBloco);
 
   const observacaoTrim = observacao.trim();
   const observacaoSection = observacaoTrim
