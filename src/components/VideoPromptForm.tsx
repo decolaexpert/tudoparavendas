@@ -240,26 +240,47 @@ export function VideoPromptForm() {
           {gerando ? "Gerando..." : "Gerar prompt personalizado"}
         </button>
 
-        {prompt && !gerando && (
-          <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-5">
-            <p className="mb-3 text-sm font-medium text-emerald-700">
+      </div>
+
+      {prompt && !gerando && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"
+          onClick={() => setPrompt(null)}
+        >
+          <div
+            className="relative flex w-full max-w-xl flex-col gap-4 rounded-2xl bg-white p-6 shadow-xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setPrompt(null)}
+              aria-label="Fechar"
+              className="absolute top-3 right-3 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-brand-blue text-white shadow hover:opacity-90"
+            >
+              ✕
+            </button>
+
+            <p className="pr-8 text-sm font-medium text-emerald-700">
               {copiado ? "Prompt copiado! ✓" : "Prompt pronto! ✨"}
             </p>
             <textarea
               readOnly
               value={prompt}
-              rows={14}
-              className="w-full resize-none rounded-lg border border-zinc-300 bg-white p-3 text-xs text-zinc-700"
+              rows={12}
+              className="w-full resize-none rounded-lg border border-zinc-300 bg-zinc-50 p-3 text-xs text-zinc-700"
             />
             <button
               onClick={handleCopiar}
-              className="mt-3 cursor-pointer rounded-lg bg-brand-black px-4 py-2.5 text-sm font-medium text-white transition hover:bg-brand-blue"
+              className="cursor-pointer rounded-lg bg-brand-black px-4 py-2.5 text-sm font-medium text-white transition hover:bg-brand-blue"
             >
               {copiado ? "Prompt copiado! ✓" : "Copiar prompt"}
             </button>
+            <p className="text-xs text-zinc-500">
+              Copie o prompt, cole no Flow, Gemini, YouTube Create ou em outra IA de geração de
+              vídeo. Anexe a foto da sua joia e veja a mágica acontecer!
+            </p>
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
       {gerando && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
