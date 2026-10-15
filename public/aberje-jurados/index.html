@@ -82,7 +82,7 @@
   .tip a { color: var(--accent); font-weight: 700; }
   .hint { font-size: 11px; color: var(--muted); margin-top: 6px; }
 
-  .status { margin-top: 12px; font-size: 13px; color: var(--muted); display: none; }
+  .status { margin-top: 12px; font-size: 13px; color: var(--muted); display: none; white-space: pre-line; overflow-wrap: anywhere; }
   .status.show { display: block; }
   .status.ok { color: var(--ok); }
   .status.err { color: var(--err); }
@@ -519,7 +519,7 @@ async function handleFile(file) {
       setStatus("Fundo removido! Ajuste o enquadramento se quiser.", "ok");
     } catch (err) {
       console.error("Falha no recorte automático:", err);
-      setStatus("Não foi possível remover o fundo automaticamente (verifique sua conexão). Usaremos a foto inteira — se preferir, envie uma foto PNG já sem fundo.", "err");
+      setStatus("Não foi possível remover o fundo automaticamente. Usaremos a foto inteira — se preferir, envie uma foto PNG já sem fundo.\nDetalhe técnico: " + String(err?.message || err).slice(0, 220), "err");
     } finally {
       pendingPhoto = false;
       setBusy(false);
