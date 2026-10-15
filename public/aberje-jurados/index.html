@@ -7,7 +7,7 @@
 <meta name="description" content="Monte o seu card de jurado do Prêmio Aberje 2026: envie sua foto, preencha seu nome e baixe a arte pronta para postar." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700;800&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
 <style>
   :root {
     --bg: #0b0b0c;
@@ -80,6 +80,7 @@
     color: var(--muted); background: rgba(242,107,29,.07); border: 1px solid rgba(242,107,29,.25);
   }
   .tip a { color: var(--accent); font-weight: 700; }
+  label.field .opt { font-weight: 500; color: #71717a; }
   .hint { font-size: 11px; color: var(--muted); margin-top: 6px; }
 
   .status { margin-top: 12px; font-size: 13px; color: var(--muted); display: none; white-space: pre-line; overflow-wrap: anywhere; }
@@ -163,13 +164,17 @@
         <p class="step"><span>2</span>Seus dados</p>
         <div class="field-wrap">
           <label class="field" for="nome">Nome</label>
-          <input type="text" id="nome" maxlength="40" placeholder="Ex.: Ricardo Barreto" autocomplete="name" />
+          <input type="text" id="nome" maxlength="40" placeholder="Mirella Kowalski" autocomplete="name" />
+        </div>
+        <div class="field-wrap">
+          <label class="field" for="cargo">Empresa/Cargo <span class="opt">(opcional)</span></label>
+          <input type="text" id="cargo" maxlength="60" placeholder="Diretora de Comunicação da Empresa X" autocomplete="organization-title" />
         </div>
         <div class="field-wrap">
           <label class="field" for="genero">Como aparece no card</label>
           <select id="genero">
             <option value="o">Jurado</option>
-            <option value="a">Jurada</option>
+            <option value="a" selected>Jurada</option>
           </select>
         </div>
       </div>
@@ -214,28 +219,29 @@
 
 <script type="module">
 /* =====================================================================
-   TEMPLATE — Post Instagram "Jurado da 52ª edição" (1080 × 1350)
-   Valores replicados do mockup do Claude Design (IG-Jurado.dc.html).
-   fundo.jpg = recorte do fundo oficial já no tamanho do card
-   logo.svg  = selo "Prêmio Aberje 2026"
+   TEMPLATE — Post Instagram "Eu fui jurado" (1080 × 1350)
+   Valores replicados do mockup do Claude Design (IG-Jurado.dc.html, v2).
+   fundo-v2.jpg = recorte do fundo oficial já no tamanho do card
+   logo.svg     = selo "Prêmio Aberje 2026"
    ===================================================================== */
 const CONFIG = {
   ano: 2026,
   edicao: "52ª",
-  arte: { fundo: "fundo.jpg", logo: "logo.svg" },
+  nomeExemplo: "Mirella Kowalski",
+  arte: { fundo: "fundo-v2.jpg", logo: "logo.svg" },
   cores: {
     fundo: "#000418",
     texto: "#ffffff",
     destaque: "#f19608",
     gradiente: ["#f19608", "#03a2f8"],
   },
-  logo: { x: 80, y: 80, largura: 340 },
-  // Caixa da foto no mockup: 917 × 917, encostada embaixo, 162px pra fora à direita
+  // Selo: left 64, top 1135, 233 × 143 (recorta 10,38% da esquerda do SVG)
+  logo: { x: 64, y: 1135, w: 233, h: 143, cortaEsquerda: 0.103846 },
+  // Caixa da foto no mockup: left 325, top 433, 917 × 917, encostada embaixo
   foto: { centroX: 783.5, alturaMax: 900, larguraMax: 917 },
-  // Coluna de texto: left 80, largura 560, centralizada na vertical, gap 32
-  texto: { x: 80, larguraMax: 560, gap: 32 },
-  legenda: () =>
-    `Tenho a honra de anunciar que faço parte do júri da ${CONFIG.edicao} edição do Prêmio Aberje, ` +
+  texto: { x: 60 },
+  legenda: (g) =>
+    `Eu fui jurad${g} da ${CONFIG.edicao} edição do Prêmio Aberje ${CONFIG.ano}, ` +
     `a principal premiação de comunicação corporativa do Brasil. 🏆\n\n` +
     `Um privilégio conhecer e avaliar de perto os melhores cases de comunicação do país.\n\n` +
     `#PremioAberje${CONFIG.ano} #Aberje #ComunicacaoCorporativa`,
@@ -311,67 +317,77 @@ function wrapLines(text, maxWidth) {
 }
 
 /* --------------------------- template --------------------------- */
-// text-shadow do mockup: 0 0 4px #000, 0 4px 16px #000, 0 0 32px #000
-const SOMBRAS = [[0, 0, 4], [0, 4, 16], [0, 0, 32]];
-function textWithShadow(text, x, y) {
+// text-shadow do mockup: 0 0 3px, 0 0 8px, 0 4px 20px, 0 0 40px (#000)
+const SOMBRAS = [[0, 0, 3], [0, 0, 8], [0, 4, 20], [0, 0, 40]];
+function withShadow(draw) {
   ctx.save();
   ctx.shadowColor = "#000";
   for (const [ox, oy, blur] of SOMBRAS) {
     ctx.shadowOffsetX = ox; ctx.shadowOffsetY = oy; ctx.shadowBlur = blur;
-    ctx.fillText(text, x, y);
+    draw();
   }
   ctx.restore();
-  ctx.fillText(text, x, y);
+  draw();
+}
+const textWithShadow = (text, x, y) => withShadow(() => ctx.fillText(text, x, y));
+
+// Linhas de texto com topo em `top` (como no CSS), retorna o y final
+function drawLines(lines, x, top, size, lineHeight) {
+  const lh = size * lineHeight;
+  lines.forEach((l, i) => textWithShadow(l, x, top + lh * i + lh / 2));
+  return top + lh * lines.length;
 }
 
-// Nome em caixa alta: 2 palavras ficam uma por linha (como no mockup);
-// nomes maiores quebram pela largura, e a fonte diminui se precisar.
-function nameLayout(nome) {
+// Nome: 2 palavras ficam uma por linha (como no mockup); nomes maiores
+// quebram pela largura, e a fonte diminui se precisar.
+function nameLayout(nome, maxW) {
   const words = nome.toUpperCase().split(/\s+/).filter(Boolean);
-  const { larguraMax } = CONFIG.texto;
-  for (let size = 64; size >= 36; size -= 2) {
+  for (let size = 72; size >= 40; size -= 2) {
     ctx.font = `800 ${size}px Montserrat`;
-    const lines = words.length <= 2 ? words : wrapLines(words.join(" "), larguraMax);
-    if (lines.length <= 3 && lines.every((l) => ctx.measureText(l).width <= larguraMax)) return { size, lines };
+    const lines = words.length <= 2 ? words : wrapLines(words.join(" "), maxW);
+    if (lines.length <= 3 && lines.every((l) => ctx.measureText(l).width <= maxW)) return { size, lines };
   }
-  ctx.font = "800 36px Montserrat";
-  return { size: 36, lines: wrapLines(words.join(" "), larguraMax) };
+  ctx.font = "800 40px Montserrat";
+  return { size: 40, lines: wrapLines(words.join(" "), maxW) };
 }
 
 function drawTexts() {
-  const { x, gap } = CONFIG.texto;
-  const nome = $("nome").value.trim() || "Seu Nome";
+  const { x } = CONFIG.texto;
   const g = $("genero").value;
-  const nm = nameLayout(nome);
-  const nameLH = nm.size * 1.05;
-  const pSize = 44, pLH = pSize * 1.3;
-  const total = nm.lines.length * nameLH + gap + 8 + gap + 3 * pLH;
-  let y = (H - total) / 2;
-
+  const nome = $("nome").value.trim() || CONFIG.nomeExemplo;
+  const cargo = $("cargo").value.trim();
   ctx.textBaseline = "middle";
-  ctx.fillStyle = CONFIG.cores.texto;
-  ctx.font = `800 ${nm.size}px Montserrat`;
-  for (const l of nm.lines) {
-    textWithShadow(l, x, y + nameLH / 2);
-    y += nameLH;
-  }
 
-  // barra com degradê laranja → azul
-  y += gap;
+  // "EU FUI / JURADO" — 110px, 800, laranja, line-height .95, top 193
+  ctx.font = "800 110px Montserrat";
+  ctx.fillStyle = CONFIG.cores.destaque;
+  drawLines(["EU FUI", `JURAD${g.toUpperCase()}`], x, 193, 110, 0.95);
+
+  // "da 52ª edição do / Prêmio Aberje 2026" — 40px, line-height 1.3, top 418
+  ctx.fillStyle = CONFIG.cores.texto;
+  ctx.font = "300 40px Montserrat";
+  drawLines([`da ${CONFIG.edicao} edição do`], x, 418, 40, 1.3);
+  ctx.font = "700 40px Montserrat";
+  drawLines([`Prêmio Aberje ${CONFIG.ano}`], x, 418 + 52, 40, 1.3);
+
+  // barra em degradê — top 545, 160 × 8
   const grad = ctx.createLinearGradient(x, 0, x + 160, 0);
   grad.addColorStop(0, CONFIG.cores.gradiente[0]);
   grad.addColorStop(1, CONFIG.cores.gradiente[1]);
   ctx.fillStyle = grad;
-  ctx.fillRect(x, y, 160, 8);
-  y += 8 + gap;
+  ctx.fillRect(x, 545, 160, 8);
 
+  // Nome — 72px, 800, line-height 1.05, top 755, largura 600
   ctx.fillStyle = CONFIG.cores.texto;
-  ctx.font = `300 ${pSize}px Montserrat`;
-  textWithShadow(`Jurad${g} da`, x, y + pLH / 2); y += pLH;
-  textWithShadow(`${CONFIG.edicao} edição do`, x, y + pLH / 2); y += pLH;
-  ctx.font = `800 ${pSize}px Montserrat`;
-  ctx.fillStyle = CONFIG.cores.destaque;
-  textWithShadow("Prêmio Aberje", x, y + pLH / 2);
+  const nm = nameLayout(nome, 600);
+  ctx.font = `800 ${nm.size}px Montserrat`;
+  let y = drawLines(nm.lines, x, 755, nm.size, 1.05);
+
+  // Empresa/Cargo (opcional) — 32px, 600, 16px abaixo do nome
+  if (cargo) {
+    ctx.font = "600 32px Montserrat";
+    drawLines(wrapLines(cargo, 600).slice(0, 2), x, y + 16, 32, 1.3);
+  }
 }
 
 function drawPerson() {
@@ -387,8 +403,10 @@ function drawPerson() {
 function drawLogo() {
   const l = state.assets.logo;
   if (!l) return;
-  const { x, y, largura } = CONFIG.logo;
-  ctx.drawImage(l, x, y, largura, largura * (l.naturalHeight / l.naturalWidth || 452 / 823));
+  const { x, y, w, h, cortaEsquerda } = CONFIG.logo;
+  const nw = l.naturalWidth || 823, nh = l.naturalHeight || 452;
+  const sx = nw * cortaEsquerda;
+  withShadow(() => ctx.drawImage(l, sx, 0, nw - sx, nh, x, y, w, h));
 }
 
 function render() {
@@ -577,7 +595,7 @@ function updateDownloadState() {
 }
 
 function updateCaption() {
-  $("legenda").value = CONFIG.legenda();
+  $("legenda").value = CONFIG.legenda($("genero").value);
 }
 
 const drop = $("drop");
@@ -588,7 +606,7 @@ $("file").addEventListener("change", (e) => handleFile(e.target.files[0]));
   drop.addEventListener(ev, (e) => { e.preventDefault(); drop.classList.remove("over"); }));
 drop.addEventListener("drop", (e) => handleFile(e.dataTransfer.files[0]));
 
-["nome", "genero"].forEach((id) => $(id).addEventListener("input", render));
+["nome", "cargo", "genero"].forEach((id) => $(id).addEventListener("input", render));
 
 $("zoom").addEventListener("input", (e) => { state.zoom = e.target.value / 100; render(); });
 $("reset").addEventListener("click", () => { autoFit(); render(); });
@@ -653,8 +671,10 @@ $("copy").addEventListener("click", async () => {
 /* ------------------------------ init ------------------------------ */
 (async () => {
   await Promise.all([
-    document.fonts.load("800 64px Montserrat"),
-    document.fonts.load("300 44px Montserrat"),
+    document.fonts.load("800 110px Montserrat"),
+    document.fonts.load("300 40px Montserrat"),
+    document.fonts.load("700 40px Montserrat"),
+    document.fonts.load("600 32px Montserrat"),
   ]).catch(() => {});
   for (const key of ["fundo", "logo"]) {
     const path = CONFIG.arte[key];

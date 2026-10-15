@@ -143,11 +143,12 @@ scripts/
 
 Página estática e pública em `/aberje` (arquivo
 `public/aberje-jurados/index.html`, sem login). O jurado envia a foto,
-digita o nome, escolhe "Jurado" ou "Jurada" e baixa o post 1080×1350
+digita o nome (e, se quiser, empresa/cargo), escolhe "Jurado" ou "Jurada"
+e baixa o post 1080×1350
 pronto para o Instagram.
 
 - **Template** replicado do mockup do Claude Design ("Instagram Jurado da
-  52ª edição"): `fundo.jpg` (fundo oficial já recortado no tamanho do
+  52ª edição", v2 — "Eu fui jurado"): `fundo-v2.jpg` (fundo oficial já recortado no tamanho do
   post) e `logo.svg` (selo Prêmio Aberje 2026). Edição, ano, cores e
   posições ficam no `CONFIG` no topo do script.
 - **Recorte de fundo** roda no navegador com o modelo MODNet quantizado
