@@ -150,10 +150,11 @@ pronto para o Instagram.
   52ª edição"): `fundo.jpg` (fundo oficial já recortado no tamanho do
   post) e `logo.svg` (selo Prêmio Aberje 2026). Edição, ano, cores e
   posições ficam no `CONFIG` no topo do script.
-- **Recorte de fundo** roda no navegador com o modelo MODNet (Apache-2.0)
-  via Transformers.js — a foto não sai do computador do jurado. O modelo
-  (~25 MB) é baixado do Hugging Face na primeira visita e fica em cache.
-  Se a foto enviada já for um PNG sem fundo, o recorte é pulado.
+- **Recorte de fundo** roda no navegador com o modelo MODNet quantizado
+  (Apache-2.0) via Transformers.js — a foto não sai do computador do
+  jurado. O modelo (~6,6 MB) fica em `models/` junto com a página; o
+  arquivo tem extensão `.onnx.wasm` porque alguns hosts (ex.: claude.ai)
+  não servem `.onnx`. Se a foto já for um PNG sem fundo, o recorte é pulado.
 - A pasta é autocontida: também pode ser hospedada em qualquer servidor
   estático (Netlify, site da Aberje etc.).
 

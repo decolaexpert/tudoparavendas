@@ -137,7 +137,7 @@
 <header>
   <div class="wrap">
     <img class="logo" src="logo.svg" alt="Prêmio Aberje 2026" />
-    <h1>Monte o seu card de jurado</h1>
+    <h1>Monte o seu card de jurado/jurada para redes sociais</h1>
   </div>
 </header>
 
@@ -241,7 +241,7 @@ const CONFIG = {
     `#PremioAberje${CONFIG.ano} #Aberje #ComunicacaoCorporativa`,
 };
 
-// Modelo de recorte (MODNet, licença Apache-2.0) via Transformers.js
+// Modelo de recorte (MODNet quantizado, licença Apache-2.0, em models/) via Transformers.js
 const TRANSFORMERS_URL = "https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.7.6/dist/transformers.min.js";
 const MODEL_ID = "Xenova/modnet";
 
@@ -398,7 +398,24 @@ function loadSegmenter() {
   if (segmenter) return segmenter;
   segmenter = (async () => {
     const tf = await import(TRANSFORMERS_URL);
-    tf.env.allowLocalModels = false;
+    // O modelo fica hospedado junto com a página (pasta models/), sem
+    // depender do Hugging Face — que é bloqueado em alguns ambientes.
+    tf.env.allowRemoteModels = false;
+    tf.env.allowLocalModels = true;
+    tf.env.localModelPath = new URL("models/", document.baseURI).href;
+    // O arquivo do modelo é publicado como ".onnx.wasm" porque alguns
+    // hosts (ex.: claude.ai) não servem a extensão .onnx.
+    tf.env.useBrowserCache = false;
+    tf.env.useCustomCache = true;
+    tf.env.customCache = {
+      match: async (key) => {
+        const url = typeof key === "string" ? key : key.url;
+        if (!url.endsWith(".onnx")) return undefined;
+        const res = await fetch(url + ".wasm");
+        return res.ok ? res : undefined;
+      },
+      put: async () => {},
+    };
     const files = {};
     const progress_callback = (e) => {
       if (e.status === "progress" && e.total) {
@@ -408,38 +425,19 @@ function loadSegmenter() {
       }
     };
     const processor = await tf.AutoProcessor.from_pretrained(MODEL_ID, { progress_callback });
-    let model, device = "wasm";
-    if (navigator.gpu) {
-      try {
-        model = await tf.AutoModel.from_pretrained(MODEL_ID, { device: "webgpu", dtype: "fp32", progress_callback });
-        device = "webgpu";
-      } catch { model = null; }
-    }
-    if (!model) model = await tf.AutoModel.from_pretrained(MODEL_ID, { device: "wasm", dtype: "fp32", progress_callback });
-    return { tf, processor, model, device };
+    const model = await tf.AutoModel.from_pretrained(MODEL_ID, { device: "wasm", dtype: "q8", progress_callback });
+    return { tf, processor, model };
   })();
   segmenter.catch(() => (segmenter = null));
   return segmenter;
 }
 
 async function computeMask(srcCanvas) {
-  let seg = await loadSegmenter();
-  const image = await seg.tf.RawImage.fromCanvas(srcCanvas);
-  const run = async (s) => {
-    const { pixel_values } = await s.processor(image);
-    const { output } = await s.model({ input: pixel_values });
-    return seg.tf.RawImage.fromTensor(output[0].mul(255).to("uint8")).resize(image.width, image.height);
-  };
-  try {
-    return await run(seg);
-  } catch (err) {
-    if (seg.device !== "webgpu") throw err;
-    // WebGPU falhou neste aparelho: recarrega em WASM
-    const model = await seg.tf.AutoModel.from_pretrained(MODEL_ID, { device: "wasm", dtype: "fp32" });
-    seg = { ...seg, model, device: "wasm" };
-    segmenter = Promise.resolve(seg);
-    return await run(seg);
-  }
+  const { tf, processor, model } = await loadSegmenter();
+  const image = await tf.RawImage.fromCanvas(srcCanvas);
+  const { pixel_values } = await processor(image);
+  const { output } = await model({ input: pixel_values });
+  return tf.RawImage.fromTensor(output[0].mul(255).to("uint8")).resize(image.width, image.height);
 }
 
 function hasTransparency(c) {
@@ -520,7 +518,7 @@ async function handleFile(file) {
       sctx.putImageData(data, 0, 0);
       setStatus("Fundo removido! Ajuste o enquadramento se quiser.", "ok");
     } catch (err) {
-      console.error(err);
+      console.error("Falha no recorte automático:", err);
       setStatus("Não foi possível remover o fundo automaticamente (verifique sua conexão). Usaremos a foto inteira — se preferir, envie uma foto PNG já sem fundo.", "err");
     } finally {
       pendingPhoto = false;
