@@ -143,20 +143,19 @@ scripts/
 
 Página estática e pública em `/aberje` (arquivo
 `public/aberje-jurados/index.html`, sem login). O jurado envia a foto,
-preenche nome e cargo, e baixa o card 1080×1080 pronto para postar.
+digita o nome, escolhe "Jurado" ou "Jurada" e baixa o post 1080×1350
+pronto para o Instagram.
 
+- **Template** replicado do mockup do Claude Design ("Instagram Jurado da
+  52ª edição"): `fundo.jpg` (fundo oficial já recortado no tamanho do
+  post) e `logo.svg` (selo Prêmio Aberje 2026). Edição, ano, cores e
+  posições ficam no `CONFIG` no topo do script.
 - **Recorte de fundo** roda no navegador com o modelo MODNet (Apache-2.0)
   via Transformers.js — a foto não sai do computador do jurado. O modelo
   (~25 MB) é baixado do Hugging Face na primeira visita e fica em cache.
-- Se a foto enviada já for um PNG sem fundo, o recorte é pulado.
-- **Trocar pela arte oficial 2026**: exporte do Canva em 1080×1080
-  `fundo.png` (só fundo e grafismos), opcionalmente `frente.png`
-  (elementos na frente da foto, com transparência) e `logo.png` (selo com
-  transparência), coloque em `public/aberje-jurados/` e preencha
-  `CONFIG.arte` no topo do script. Edição, ano, cores, posição da foto e
-  do texto e a legenda sugerida também ficam no `CONFIG`.
-- O arquivo é autocontido: também pode ser hospedado em qualquer
-  servidor estático (Netlify, site da Aberje etc.).
+  Se a foto enviada já for um PNG sem fundo, o recorte é pulado.
+- A pasta é autocontida: também pode ser hospedada em qualquer servidor
+  estático (Netlify, site da Aberje etc.).
 
 ## Deploy
 

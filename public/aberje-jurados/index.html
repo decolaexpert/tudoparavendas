@@ -4,10 +4,10 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Card do Jurado · Prêmio Aberje 2026</title>
-<meta name="description" content="Monte o seu card de jurado do Prêmio Aberje 2026: envie sua foto, preencha nome e cargo e baixe a arte pronta para postar." />
+<meta name="description" content="Monte o seu card de jurado do Prêmio Aberje 2026: envie sua foto, preencha seu nome e baixe a arte pronta para postar." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,700;0,800;1,800&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700;800&display=swap" rel="stylesheet" />
 <style>
   :root {
     --bg: #0b0b0c;
@@ -101,7 +101,7 @@
 
   .preview { position: sticky; top: 20px; }
   .canvas-wrap {
-    position: relative; width: 100%; max-width: 640px; margin: 0 auto; aspect-ratio: 1 / 1;
+    position: relative; width: 100%; max-width: 560px; margin: 0 auto; aspect-ratio: 4 / 5;
     border-radius: 14px; overflow: hidden; border: 1px solid var(--line); background: #000;
     box-shadow: 0 20px 60px rgba(0,0,0,.5);
   }
@@ -117,7 +117,7 @@
   @keyframes spin { to { transform: rotate(360deg); } }
   .preview-note { text-align: center; font-size: 12px; color: var(--muted); margin-top: 10px; }
 
-  .caption { margin-top: 22px; max-width: 640px; margin-left: auto; margin-right: auto; }
+  .caption { margin-top: 22px; max-width: 560px; margin-left: auto; margin-right: auto; }
   .caption textarea { min-height: 120px; resize: vertical; font-size: 13px; line-height: 1.5; }
   .privacy { font-size: 11px; color: var(--muted); margin-top: 16px; line-height: 1.5; }
 </style>
@@ -156,10 +156,6 @@
           <input type="text" id="nome" maxlength="40" placeholder="Ex.: Ricardo Barreto" autocomplete="name" />
         </div>
         <div class="field-wrap">
-          <label class="field" for="cargo">Cargo e empresa</label>
-          <input type="text" id="cargo" maxlength="70" placeholder="Ex.: Diretor de Comunicação da Empresa X" autocomplete="organization-title" />
-        </div>
-        <div class="field-wrap">
           <label class="field" for="genero">Como aparece no card</label>
           <select id="genero">
             <option value="o">Jurado</option>
@@ -190,10 +186,10 @@
 
     <section class="preview">
       <div class="canvas-wrap" id="canvasWrap">
-        <canvas id="card" width="1080" height="1080"></canvas>
+        <canvas id="card" width="1080" height="1350"></canvas>
         <div class="busy" id="busy"><div class="spinner"></div><div id="busyText">Removendo o fundo…</div></div>
       </div>
-      <p class="preview-note">Prévia em tempo real · arte final em 1080 × 1080 px</p>
+      <p class="preview-note">Prévia em tempo real · arte final em 1080 × 1350 px</p>
 
       <div class="caption">
         <label class="field" for="legenda">Sugestão de legenda para o post</label>
@@ -206,33 +202,27 @@
 
 <script type="module">
 /* =====================================================================
-   CONFIGURAÇÃO DO TEMPLATE
-   Para usar a arte oficial de 2026, exporte do Canva/Figma em 1080x1080:
-     - fundo.png  -> só o fundo + grafismos (sem foto, sem textos)
-     - frente.png -> (opcional) elementos que ficam NA FRENTE da foto, com transparência
-     - logo.png   -> (opcional) selo "Prêmio Aberje 2026" com fundo transparente
-   Coloque os arquivos nesta mesma pasta e preencha os caminhos abaixo.
-   Enquanto estiverem null, o sistema desenha o template padrão em código.
+   TEMPLATE — Post Instagram "Jurado da 52ª edição" (1080 × 1350)
+   Valores replicados do mockup do Claude Design (IG-Jurado.dc.html).
+   fundo.jpg = recorte do fundo oficial já no tamanho do card
+   logo.svg  = selo "Prêmio Aberje 2026"
    ===================================================================== */
 const CONFIG = {
   ano: 2026,
   edicao: "52ª",
-  arte: {
-    fundo: null,   // ex.: "fundo.png"
-    frente: null,  // ex.: "frente.png"
-    logo: null,    // ex.: "logo.png"
-  },
+  arte: { fundo: "fundo.jpg", logo: "logo.svg" },
   cores: {
-    fundo: "#0a0a0a",
-    destaque: "#f26b1d",
+    fundo: "#000418",
     texto: "#ffffff",
-    textoSecundario: "#d4d4d8",
+    destaque: "#f19608",
+    gradiente: ["#f19608", "#03a2f8"],
   },
-  // Área onde a pessoa recortada é encaixada automaticamente (px no card 1080)
-  foto: { centroX: 745, alturaMax: 800, larguraMax: 680 },
-  // Bloco de texto à esquerda
-  texto: { x: 62, topo: 372, larguraMax: 420 },
-  legenda: (d) =>
+  logo: { x: 80, y: 80, largura: 340 },
+  // Caixa da foto no mockup: 917 × 917, encostada embaixo, 162px pra fora à direita
+  foto: { centroX: 783.5, alturaMax: 900, larguraMax: 917 },
+  // Coluna de texto: left 80, largura 560, centralizada na vertical, gap 32
+  texto: { x: 80, larguraMax: 560, gap: 32 },
+  legenda: () =>
     `Tenho a honra de anunciar que faço parte do júri da ${CONFIG.edicao} edição do Prêmio Aberje, ` +
     `a principal premiação de comunicação corporativa do Brasil. 🏆\n\n` +
     `Um privilégio conhecer e avaliar de perto os melhores cases de comunicação do país.\n\n` +
@@ -243,7 +233,7 @@ const CONFIG = {
 const TRANSFORMERS_URL = "https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.7.6/dist/transformers.min.js";
 const MODEL_ID = "Xenova/modnet";
 
-const W = 1080, H = 1080;
+const W = 1080, H = 1350;
 const $ = (id) => document.getElementById(id);
 const canvas = $("card");
 const ctx = canvas.getContext("2d");
@@ -251,7 +241,7 @@ const ctx = canvas.getContext("2d");
 const state = {
   person: null,       // canvas com a pessoa recortada (cortado no contorno)
   baseScale: 1, zoom: 1, offX: 0, offY: 0,
-  assets: { fundo: null, frente: null, logo: null },
+  assets: { fundo: null, logo: null },
 };
 
 /* ------------------------------ util ------------------------------ */
@@ -278,23 +268,8 @@ function setBusy(on, text) {
 }
 
 function slug(s) {
-  return s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
+  return s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase()
     .replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "jurado";
-}
-
-// Texto com espaçamento entre letras (funciona em qualquer navegador)
-function spacedText(text, x, y, spacing) {
-  let cx = x;
-  for (const ch of text) {
-    ctx.fillText(ch, cx, y);
-    cx += ctx.measureText(ch).width + spacing;
-  }
-  return cx - spacing - x;
-}
-function spacedWidth(text, spacing) {
-  let w = 0;
-  for (const ch of text) w += ctx.measureText(ch).width + spacing;
-  return w - spacing;
 }
 
 function wrapLines(text, maxWidth) {
@@ -313,133 +288,67 @@ function wrapLines(text, maxWidth) {
 }
 
 /* --------------------------- template --------------------------- */
-// Faixa listrada (grafismo inspirado na identidade do Prêmio Aberje)
-function stripedShape(points, base, stripe, angle, gap, lineW) {
+// text-shadow do mockup: 0 0 4px #000, 0 4px 16px #000, 0 0 32px #000
+const SOMBRAS = [[0, 0, 4], [0, 4, 16], [0, 0, 32]];
+function textWithShadow(text, x, y) {
   ctx.save();
-  ctx.beginPath();
-  points.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)));
-  ctx.closePath();
-  ctx.fillStyle = base;
-  ctx.fill();
-  ctx.clip();
-  ctx.strokeStyle = stripe;
-  ctx.lineWidth = lineW;
-  const xs = points.map((p) => p[0]), ys = points.map((p) => p[1]);
-  const cx = (Math.min(...xs) + Math.max(...xs)) / 2;
-  const cy = (Math.min(...ys) + Math.max(...ys)) / 2;
-  const r = Math.hypot(Math.max(...xs) - Math.min(...xs), Math.max(...ys) - Math.min(...ys));
-  ctx.translate(cx, cy);
-  ctx.rotate((angle * Math.PI) / 180);
-  ctx.beginPath();
-  for (let x = -r; x <= r; x += gap) {
-    ctx.moveTo(x, -r);
-    ctx.lineTo(x, r);
+  ctx.shadowColor = "#000";
+  for (const [ox, oy, blur] of SOMBRAS) {
+    ctx.shadowOffsetX = ox; ctx.shadowOffsetY = oy; ctx.shadowBlur = blur;
+    ctx.fillText(text, x, y);
   }
-  ctx.stroke();
   ctx.restore();
+  ctx.fillText(text, x, y);
 }
 
-function drawDefaultBackground() {
-  ctx.fillStyle = CONFIG.cores.fundo;
-  ctx.fillRect(0, 0, W, H);
-
-  // azul ao fundo, atrás da pessoa
-  stripedShape([[760, 330], [1080, 250], [1080, 760], [880, 720]], "#1b5f86", "#0d2b3e", 70, 13, 5);
-  stripedShape([[395, 690], [470, 640], [520, 760], [430, 800]], "#1b5f86", "#0d2b3e", 70, 13, 5);
-  // vermelho / laranja grande
-  stripedShape([[470, 250], [1080, 215], [1080, 300], [860, 560], [600, 640]], "#e2401c", "#f58a1f", 62, 15, 7);
-  stripedShape([[860, 560], [1080, 300], [1080, 470], [960, 610]], "#f26b1d", "#ffb21a", 62, 13, 5);
-  // faixas laranja horizontais
-  stripedShape([[300, 120], [1080, 70], [1080, 140], [320, 178]], "#f58a1f", "#ffc23d", 82, 11, 5);
-  stripedShape([[350, 200], [1080, 160], [1080, 218], [370, 245]], "#f58a1f", "#ffc23d", 82, 11, 5);
-  // verde no topo
-  stripedShape([[390, 0], [960, 0], [940, 70], [410, 92]], "#1a9447", "#e9d51e", 55, 13, 4);
-  // detalhe roxo à direita
-  stripedShape([[1040, 20], [1080, 10], [1080, 200], [1050, 210]], "#5b2a86", "#f26b1d", 80, 12, 4);
-}
-
-function drawDefaultLogo() {
-  const x = 58, top = 916;
-  ctx.fillStyle = "#fff";
-  ctx.textBaseline = "alphabetic";
-
-  ctx.font = "800 30px Montserrat";
-  const wPremio = spacedText("PRÊMIO", x + 10, top + 28, 10);
-
-  ctx.font = "800 40px Montserrat";
-  const wAberje = ctx.measureText("ABERJE").width;
-  const boxW = Math.max(wAberje + 24, wPremio + 20);
-  ctx.fillRect(x, top + 40, boxW, 48);
-  ctx.fillStyle = "#000";
-  ctx.fillText("ABERJE", x + (boxW - wAberje) / 2, top + 79);
-
-  ctx.fillStyle = "#fff";
-  ctx.font = "italic 800 30px Montserrat";
-  const ano = String(CONFIG.ano);
-  spacedText(ano, x + (boxW - spacedWidth(ano, 12)) / 2, top + 124, 12);
-
-  // troféu estilizado
-  const tx = x + boxW + 16;
-  ctx.strokeStyle = "#fff";
-  ctx.lineWidth = 3;
-  ctx.beginPath();
-  for (let i = 0; i < 5; i++) {
-    const bx = tx + 6 + i * 8;
-    ctx.moveTo(bx, top + 4 + (i % 2) * 8);
-    ctx.lineTo(bx + 4, top + 100);
+// Nome em caixa alta: 2 palavras ficam uma por linha (como no mockup);
+// nomes maiores quebram pela largura, e a fonte diminui se precisar.
+function nameLayout(nome) {
+  const words = nome.toUpperCase().split(/\s+/).filter(Boolean);
+  const { larguraMax } = CONFIG.texto;
+  for (let size = 64; size >= 36; size -= 2) {
+    ctx.font = `800 ${size}px Montserrat`;
+    const lines = words.length <= 2 ? words : wrapLines(words.join(" "), larguraMax);
+    if (lines.length <= 3 && lines.every((l) => ctx.measureText(l).width <= larguraMax)) return { size, lines };
   }
-  ctx.moveTo(tx, top + 100); ctx.lineTo(tx + 52, top + 100);
-  ctx.lineTo(tx + 58, top + 128); ctx.lineTo(tx - 6, top + 128); ctx.closePath();
-  ctx.stroke();
+  ctx.font = "800 36px Montserrat";
+  return { size: 36, lines: wrapLines(words.join(" "), larguraMax) };
 }
 
 function drawTexts() {
-  const { x, topo, larguraMax } = CONFIG.texto;
-  const nome = $("nome").value.trim() || "SEU NOME";
-  const cargo = $("cargo").value.trim();
+  const { x, gap } = CONFIG.texto;
+  const nome = $("nome").value.trim() || "Seu Nome";
   const g = $("genero").value;
-  ctx.textBaseline = "alphabetic";
-  let y = topo;
+  const nm = nameLayout(nome);
+  const nameLH = nm.size * 1.05;
+  const pSize = 44, pLH = pSize * 1.3;
+  const total = nm.lines.length * nameLH + gap + 8 + gap + 3 * pLH;
+  let y = (H - total) / 2;
 
-  // Nome: diminui a fonte até caber em no máximo 2 linhas
-  let size = 50, lines;
-  do {
-    ctx.font = `800 ${size}px Montserrat`;
-    lines = wrapLines(nome.toUpperCase(), larguraMax);
-    size -= 2;
-  } while ((lines.length > 2 || lines.some((l) => ctx.measureText(l).width > larguraMax)) && size > 26);
-  size += 2;
+  ctx.textBaseline = "middle";
   ctx.fillStyle = CONFIG.cores.texto;
-  for (const l of lines) {
-    y += size;
-    ctx.fillText(l, x, y);
-    y += size * 0.12;
+  ctx.font = `800 ${nm.size}px Montserrat`;
+  for (const l of nm.lines) {
+    textWithShadow(l, x, y + nameLH / 2);
+    y += nameLH;
   }
 
-  // Cargo
-  if (cargo) {
-    ctx.font = "500 24px Montserrat";
-    ctx.fillStyle = CONFIG.cores.textoSecundario;
-    y += 14;
-    for (const l of wrapLines(cargo, larguraMax).slice(0, 3)) {
-      y += 30;
-      ctx.fillText(l, x, y);
-    }
-  }
+  // barra com degradê laranja → azul
+  y += gap;
+  const grad = ctx.createLinearGradient(x, 0, x + 160, 0);
+  grad.addColorStop(0, CONFIG.cores.gradiente[0]);
+  grad.addColorStop(1, CONFIG.cores.gradiente[1]);
+  ctx.fillStyle = grad;
+  ctx.fillRect(x, y, 160, 8);
+  y += 8 + gap;
 
-  // Linha laranja
-  y += 26;
+  ctx.fillStyle = CONFIG.cores.texto;
+  ctx.font = `300 ${pSize}px Montserrat`;
+  textWithShadow(`Jurad${g} da`, x, y + pLH / 2); y += pLH;
+  textWithShadow(`${CONFIG.edicao} edição do`, x, y + pLH / 2); y += pLH;
+  ctx.font = `800 ${pSize}px Montserrat`;
   ctx.fillStyle = CONFIG.cores.destaque;
-  ctx.fillRect(x, y, 300, 4);
-
-  // "Jurado da 52ª edição do Prêmio Aberje"
-  y += 18;
-  ctx.fillStyle = CONFIG.cores.texto;
-  ctx.font = "400 34px Montserrat";
-  y += 38; ctx.fillText(`Jurad${g} da`, x, y);
-  y += 44; ctx.fillText(`${CONFIG.edicao} edição do`, x, y);
-  ctx.font = "800 34px Montserrat";
-  y += 44; ctx.fillText("Prêmio Aberje", x, y);
+  textWithShadow("Prêmio Aberje", x, y + pLH / 2);
 }
 
 function drawPerson() {
@@ -452,15 +361,20 @@ function drawPerson() {
   ctx.drawImage(p, x, y, w, h);
 }
 
+function drawLogo() {
+  const l = state.assets.logo;
+  if (!l) return;
+  const { x, y, largura } = CONFIG.logo;
+  ctx.drawImage(l, x, y, largura, largura * (l.naturalHeight / l.naturalWidth || 452 / 823));
+}
+
 function render() {
-  ctx.clearRect(0, 0, W, H);
+  ctx.fillStyle = CONFIG.cores.fundo;
+  ctx.fillRect(0, 0, W, H);
   if (state.assets.fundo) ctx.drawImage(state.assets.fundo, 0, 0, W, H);
-  else drawDefaultBackground();
   drawPerson();
-  if (state.assets.frente) ctx.drawImage(state.assets.frente, 0, 0, W, H);
   drawTexts();
-  if (state.assets.logo) ctx.drawImage(state.assets.logo, 0, 0, W, H);
-  else drawDefaultLogo();
+  drawLogo();
   updateCaption();
   updateDownloadState();
 }
@@ -616,7 +530,7 @@ function updateDownloadState() {
   const ok = !!state.person && $("nome").value.trim().length > 1;
   $("download").disabled = !ok;
   $("downloadHint").textContent = ok
-    ? "Arte em 1080 × 1080 px, pronta para Instagram, LinkedIn e Facebook."
+    ? "Arte em 1080 × 1350 px (formato retrato), pronta para Instagram, LinkedIn e Facebook."
     : "Envie sua foto e preencha o nome para liberar o download.";
 }
 
@@ -632,7 +546,7 @@ $("file").addEventListener("change", (e) => handleFile(e.target.files[0]));
   drop.addEventListener(ev, (e) => { e.preventDefault(); drop.classList.remove("over"); }));
 drop.addEventListener("drop", (e) => handleFile(e.dataTransfer.files[0]));
 
-["nome", "cargo", "genero"].forEach((id) => $(id).addEventListener("input", render));
+["nome", "genero"].forEach((id) => $(id).addEventListener("input", render));
 
 $("zoom").addEventListener("input", (e) => { state.zoom = e.target.value / 100; render(); });
 $("reset").addEventListener("click", () => { autoFit(); render(); });
@@ -684,12 +598,10 @@ $("copy").addEventListener("click", async () => {
 /* ------------------------------ init ------------------------------ */
 (async () => {
   await Promise.all([
-    document.fonts.load("800 50px Montserrat"),
-    document.fonts.load("400 34px Montserrat"),
-    document.fonts.load("500 24px Montserrat"),
-    document.fonts.load("italic 800 30px Montserrat"),
+    document.fonts.load("800 64px Montserrat"),
+    document.fonts.load("300 44px Montserrat"),
   ]).catch(() => {});
-  for (const key of ["fundo", "frente", "logo"]) {
+  for (const key of ["fundo", "logo"]) {
     const path = CONFIG.arte[key];
     if (path) state.assets[key] = await loadImage(path).catch(() => null);
   }
