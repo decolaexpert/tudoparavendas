@@ -244,6 +244,16 @@ const CONFIG = {
 // Modelo de recorte (MODNet quantizado, licença Apache-2.0, em models/) via Transformers.js
 const TRANSFORMERS_URL = "https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.7.6/dist/transformers.min.js";
 const MODEL_ID = "Xenova/modnet";
+const MODEL_BYTES = 6632188; // tamanho exato de model_quantized.onnx
+const MODEL_CONFIGS = {
+  "config.json": { model_type: "modnet", "transformers.js_config": { dtype: "fp32" } },
+  "preprocessor_config.json": {
+    do_normalize: true, do_pad: false, do_rescale: true, do_resize: true,
+    image_mean: [0.5, 0.5, 0.5], image_std: [0.5, 0.5, 0.5],
+    feature_extractor_type: "ImageFeatureExtractor", resample: 2,
+    rescale_factor: 0.00392156862745098, size: { shortest_edge: 512 }, size_divisibility: 32,
+  },
+};
 
 const W = 1080, H = 1350;
 const $ = (id) => document.getElementById(id);
@@ -410,9 +420,18 @@ function loadSegmenter() {
     tf.env.customCache = {
       match: async (key) => {
         const url = typeof key === "string" ? key : key.url;
-        if (!url.endsWith(".onnx")) return undefined;
+        const name = url.split("/").pop();
+        // Configurações embutidas: alguns hosts alteram arquivos .json servidos
+        if (MODEL_CONFIGS[name]) {
+          return new Response(JSON.stringify(MODEL_CONFIGS[name]), { headers: { "Content-Type": "application/json" } });
+        }
+        if (!name.endsWith(".onnx")) return undefined;
         const res = await fetch(url + ".wasm");
-        return res.ok ? res : undefined;
+        if (!res.ok) return undefined;
+        let buf = await res.arrayBuffer();
+        // descarta qualquer byte que o host acrescente ao fim do arquivo
+        if (buf.byteLength > MODEL_BYTES) buf = buf.slice(0, MODEL_BYTES);
+        return new Response(buf);
       },
       put: async () => {},
     };
