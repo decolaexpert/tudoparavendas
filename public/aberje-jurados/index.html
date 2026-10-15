@@ -72,6 +72,11 @@
     border-radius: 10px; padding: 12px; font: inherit; font-size: 15px; outline: none;
   }
   input[type=text]:focus, select:focus, textarea:focus { border-color: var(--accent); }
+  .tip {
+    margin: 12px 0 0; padding: 10px 12px; border-radius: 10px; font-size: 12px; line-height: 1.5;
+    color: var(--muted); background: rgba(242,107,29,.07); border: 1px solid rgba(242,107,29,.25);
+  }
+  .tip a { color: var(--accent); font-weight: 700; }
   .hint { font-size: 11px; color: var(--muted); margin-top: 6px; }
 
   .status { margin-top: 12px; font-size: 13px; color: var(--muted); display: none; }
@@ -147,6 +152,7 @@
           <div id="statusText"></div>
           <div class="bar" id="bar" hidden><i id="barFill"></i></div>
         </div>
+        <p class="tip">💡 Caso o recorte (fundo) da sua foto não fique perfeito, sugerimos fazer a remoção do fundo em <a href="https://remove.bg/pt-br" target="_blank" rel="noopener">remove.bg</a> e subir aqui a foto já sem o fundo.</p>
       </div>
 
       <div class="block">
