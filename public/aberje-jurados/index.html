@@ -244,6 +244,7 @@ const CONFIG = {
 // Modelo de recorte (MODNet quantizado, licença Apache-2.0, em models/) via Transformers.js
 const TRANSFORMERS_URL = "https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.7.6/dist/transformers.min.js";
 const MODEL_ID = "Xenova/modnet";
+const ENGINE_PARTS = [["engine/ort-1.wasm", 10798009], ["engine/ort-2.wasm", 10798010]];
 const MODEL_BYTES = 6632188; // tamanho exato de model_quantized.onnx
 const MODEL_CONFIGS = {
   "config.json": { model_type: "modnet", "transformers.js_config": { dtype: "fp32" } },
@@ -443,6 +444,18 @@ function loadSegmenter() {
         if (pendingPhoto) setStatus("Preparando o recorte automático (só na primeira vez)…", "", (l / t) * 100);
       }
     };
+    // Motor ONNX (WebAssembly) também hospedado aqui, dividido em 2 partes
+    // (limite de tamanho por arquivo de alguns hosts). Juntamos no navegador.
+    const parts = await Promise.all(ENGINE_PARTS.map(async ([file, size]) => {
+      const res = await fetch(new URL(file, document.baseURI));
+      if (!res.ok) throw new Error(`Falha ao baixar ${file} (${res.status})`);
+      return new Uint8Array(await res.arrayBuffer(), 0, size);
+    }));
+    const wasm = new Uint8Array(parts.reduce((n, p) => n + p.length, 0));
+    parts.reduce((off, p) => (wasm.set(p, off), off + p.length), 0);
+    tf.env.backends.onnx.wasm.wasmBinary = wasm.buffer;
+    tf.env.backends.onnx.wasm.numThreads = 1;
+
     const processor = await tf.AutoProcessor.from_pretrained(MODEL_ID, { progress_callback });
     const model = await tf.AutoModel.from_pretrained(MODEL_ID, { device: "wasm", dtype: "q8", progress_callback });
     return { tf, processor, model };
