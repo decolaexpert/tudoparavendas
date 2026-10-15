@@ -1,6 +1,13 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  async rewrites() {
+    return [
+      // Gerador de card dos jurados do Prêmio Aberje (public/aberje-jurados)
+      { source: "/aberje", destination: "/aberje-jurados/index.html" },
+      { source: "/aberje-jurados", destination: "/aberje-jurados/index.html" },
+    ];
+  },
   images: {
     // Reaplicado: confirmado com teste real (PC que nunca visitou o site —
     // nem a logo local carregou) que o pipeline de otimização de imagem

@@ -1,0 +1,702 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Card do Jurado · Prêmio Aberje 2026</title>
+<meta name="description" content="Monte o seu card de jurado do Prêmio Aberje 2026: envie sua foto, preencha nome e cargo e baixe a arte pronta para postar." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,700;0,800;1,800&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #0b0b0c;
+    --panel: #151517;
+    --line: #2a2a2e;
+    --text: #f4f4f5;
+    --muted: #a1a1aa;
+    --accent: #f26b1d;
+    --accent-2: #ffb21a;
+    --ok: #22c55e;
+    --err: #ef4444;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: Montserrat, Arial, Helvetica, sans-serif;
+    min-height: 100vh;
+  }
+  header {
+    border-bottom: 1px solid var(--line);
+    padding: 20px 16px;
+  }
+  header .wrap { display: flex; align-items: center; gap: 14px; }
+  header .tag {
+    font-size: 11px; font-weight: 800; letter-spacing: .25em; text-transform: uppercase;
+    color: var(--accent);
+  }
+  header h1 { margin: 2px 0 0; font-size: 20px; font-weight: 800; }
+  .wrap { max-width: 1180px; margin: 0 auto; }
+  main { padding: 28px 16px 60px; }
+  .grid { display: grid; grid-template-columns: 380px 1fr; gap: 28px; align-items: start; }
+  @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+
+  .panel {
+    background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 22px;
+  }
+  .step { display: flex; align-items: center; gap: 10px; margin: 0 0 12px; font-size: 13px;
+    font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+  .step span {
+    width: 24px; height: 24px; border-radius: 50%; border: 1.5px solid var(--accent); color: var(--accent);
+    display: inline-flex; align-items: center; justify-content: center; font-size: 12px;
+  }
+  .block + .block { margin-top: 26px; }
+
+  .drop {
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+    min-height: 150px; border: 1.5px dashed #3f3f46; border-radius: 12px; padding: 16px;
+    text-align: center; cursor: pointer; transition: border-color .15s, background .15s;
+    color: var(--muted); font-size: 13px;
+  }
+  .drop strong { color: var(--text); font-size: 14px; }
+  .drop:hover, .drop.over { border-color: var(--accent); background: rgba(242,107,29,.06); }
+  .drop img { max-height: 110px; border-radius: 8px; }
+  .drop input { display: none; }
+
+  label.field { display: block; font-size: 12px; font-weight: 700; color: var(--muted); margin: 0 0 6px; }
+  .field-wrap + .field-wrap { margin-top: 14px; }
+  input[type=text], select, textarea {
+    width: 100%; background: #0f0f11; border: 1px solid var(--line); color: var(--text);
+    border-radius: 10px; padding: 12px; font: inherit; font-size: 15px; outline: none;
+  }
+  input[type=text]:focus, select:focus, textarea:focus { border-color: var(--accent); }
+  .hint { font-size: 11px; color: var(--muted); margin-top: 6px; }
+
+  .status { margin-top: 12px; font-size: 13px; color: var(--muted); display: none; }
+  .status.show { display: block; }
+  .status.ok { color: var(--ok); }
+  .status.err { color: var(--err); }
+  .bar { height: 6px; background: #27272a; border-radius: 99px; overflow: hidden; margin-top: 8px; }
+  .bar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--accent), var(--accent-2)); transition: width .2s; }
+
+  .adjust { display: none; }
+  .adjust.show { display: block; }
+  .range { display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--muted); }
+  .range input { flex: 1; accent-color: var(--accent); }
+  .row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+
+  button {
+    font: inherit; cursor: pointer; border-radius: 10px; border: 1px solid var(--line);
+    background: #1f1f23; color: var(--text); padding: 10px 14px; font-size: 13px; font-weight: 700;
+  }
+  button:hover { border-color: #52525b; }
+  button.primary {
+    width: 100%; background: var(--accent); border-color: var(--accent); color: #fff;
+    padding: 15px; font-size: 15px; font-weight: 800; letter-spacing: .03em;
+  }
+  button.primary:hover { filter: brightness(1.08); }
+  button:disabled { opacity: .45; cursor: not-allowed; filter: none; }
+
+  .preview { position: sticky; top: 20px; }
+  .canvas-wrap {
+    position: relative; width: 100%; max-width: 640px; margin: 0 auto; aspect-ratio: 1 / 1;
+    border-radius: 14px; overflow: hidden; border: 1px solid var(--line); background: #000;
+    box-shadow: 0 20px 60px rgba(0,0,0,.5);
+  }
+  .canvas-wrap canvas { width: 100%; height: 100%; display: block; touch-action: none; }
+  .canvas-wrap.draggable canvas { cursor: grab; }
+  .canvas-wrap.dragging canvas { cursor: grabbing; }
+  .busy {
+    position: absolute; inset: 0; display: none; align-items: center; justify-content: center;
+    flex-direction: column; gap: 12px; background: rgba(0,0,0,.65); font-size: 14px; font-weight: 700;
+  }
+  .busy.show { display: flex; }
+  .spinner { width: 34px; height: 34px; border-radius: 50%; border: 3px solid #3f3f46; border-top-color: var(--accent); animation: spin 0.9s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .preview-note { text-align: center; font-size: 12px; color: var(--muted); margin-top: 10px; }
+
+  .caption { margin-top: 22px; max-width: 640px; margin-left: auto; margin-right: auto; }
+  .caption textarea { min-height: 120px; resize: vertical; font-size: 13px; line-height: 1.5; }
+  .privacy { font-size: 11px; color: var(--muted); margin-top: 16px; line-height: 1.5; }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div>
+      <div class="tag">Prêmio Aberje 2026</div>
+      <h1>Monte o seu card de jurado</h1>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="wrap grid">
+    <section class="panel">
+      <div class="block">
+        <p class="step"><span>1</span>Sua foto</p>
+        <label class="drop" id="drop">
+          <input type="file" id="file" accept="image/png,image/jpeg,image/webp,image/heic" />
+          <img id="thumb" alt="" hidden />
+          <strong id="dropTitle">Clique ou arraste sua foto aqui</strong>
+          <span id="dropHint">JPG ou PNG · de preferência do peito pra cima, fundo simples e boa luz</span>
+        </label>
+        <div class="status" id="status">
+          <div id="statusText"></div>
+          <div class="bar" id="bar" hidden><i id="barFill"></i></div>
+        </div>
+      </div>
+
+      <div class="block">
+        <p class="step"><span>2</span>Seus dados</p>
+        <div class="field-wrap">
+          <label class="field" for="nome">Nome</label>
+          <input type="text" id="nome" maxlength="40" placeholder="Ex.: Ricardo Barreto" autocomplete="name" />
+        </div>
+        <div class="field-wrap">
+          <label class="field" for="cargo">Cargo e empresa</label>
+          <input type="text" id="cargo" maxlength="70" placeholder="Ex.: Diretor de Comunicação da Empresa X" autocomplete="organization-title" />
+        </div>
+        <div class="field-wrap">
+          <label class="field" for="genero">Como aparece no card</label>
+          <select id="genero">
+            <option value="o">Jurado</option>
+            <option value="a">Jurada</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="block adjust" id="adjust">
+        <p class="step"><span>3</span>Ajuste o enquadramento</p>
+        <div class="range">
+          <span>Zoom</span>
+          <input type="range" id="zoom" min="50" max="200" value="100" />
+        </div>
+        <p class="hint">Arraste a foto no card para reposicionar.</p>
+        <div class="row">
+          <button type="button" id="reset">Centralizar de novo</button>
+        </div>
+      </div>
+
+      <div class="block">
+        <button type="button" class="primary" id="download" disabled>Baixar card (PNG)</button>
+        <p class="hint" id="downloadHint">Envie sua foto e preencha o nome para liberar o download.</p>
+      </div>
+
+      <p class="privacy">🔒 Sua foto é processada no seu próprio navegador. Ela não é enviada nem armazenada em nenhum servidor.</p>
+    </section>
+
+    <section class="preview">
+      <div class="canvas-wrap" id="canvasWrap">
+        <canvas id="card" width="1080" height="1080"></canvas>
+        <div class="busy" id="busy"><div class="spinner"></div><div id="busyText">Removendo o fundo…</div></div>
+      </div>
+      <p class="preview-note">Prévia em tempo real · arte final em 1080 × 1080 px</p>
+
+      <div class="caption">
+        <label class="field" for="legenda">Sugestão de legenda para o post</label>
+        <textarea id="legenda" readonly></textarea>
+        <div class="row"><button type="button" id="copy">Copiar legenda</button></div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<script type="module">
+/* =====================================================================
+   CONFIGURAÇÃO DO TEMPLATE
+   Para usar a arte oficial de 2026, exporte do Canva/Figma em 1080x1080:
+     - fundo.png  -> só o fundo + grafismos (sem foto, sem textos)
+     - frente.png -> (opcional) elementos que ficam NA FRENTE da foto, com transparência
+     - logo.png   -> (opcional) selo "Prêmio Aberje 2026" com fundo transparente
+   Coloque os arquivos nesta mesma pasta e preencha os caminhos abaixo.
+   Enquanto estiverem null, o sistema desenha o template padrão em código.
+   ===================================================================== */
+const CONFIG = {
+  ano: 2026,
+  edicao: "52ª",
+  arte: {
+    fundo: null,   // ex.: "fundo.png"
+    frente: null,  // ex.: "frente.png"
+    logo: null,    // ex.: "logo.png"
+  },
+  cores: {
+    fundo: "#0a0a0a",
+    destaque: "#f26b1d",
+    texto: "#ffffff",
+    textoSecundario: "#d4d4d8",
+  },
+  // Área onde a pessoa recortada é encaixada automaticamente (px no card 1080)
+  foto: { centroX: 745, alturaMax: 800, larguraMax: 680 },
+  // Bloco de texto à esquerda
+  texto: { x: 62, topo: 372, larguraMax: 420 },
+  legenda: (d) =>
+    `Tenho a honra de anunciar que faço parte do júri da ${CONFIG.edicao} edição do Prêmio Aberje, ` +
+    `a principal premiação de comunicação corporativa do Brasil. 🏆\n\n` +
+    `Um privilégio conhecer e avaliar de perto os melhores cases de comunicação do país.\n\n` +
+    `#PremioAberje${CONFIG.ano} #Aberje #ComunicacaoCorporativa`,
+};
+
+// Modelo de recorte (MODNet, licença Apache-2.0) via Transformers.js
+const TRANSFORMERS_URL = "https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.7.6/dist/transformers.min.js";
+const MODEL_ID = "Xenova/modnet";
+
+const W = 1080, H = 1080;
+const $ = (id) => document.getElementById(id);
+const canvas = $("card");
+const ctx = canvas.getContext("2d");
+
+const state = {
+  person: null,       // canvas com a pessoa recortada (cortado no contorno)
+  baseScale: 1, zoom: 1, offX: 0, offY: 0,
+  assets: { fundo: null, frente: null, logo: null },
+};
+
+/* ------------------------------ util ------------------------------ */
+function loadImage(src) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = () => reject(new Error("Falha ao carregar " + src));
+    img.src = src;
+  });
+}
+
+function setStatus(text, kind = "", progress = null) {
+  const el = $("status");
+  el.className = "status show " + kind;
+  $("statusText").textContent = text;
+  $("bar").hidden = progress === null;
+  if (progress !== null) $("barFill").style.width = Math.round(progress) + "%";
+}
+
+function setBusy(on, text) {
+  $("busy").classList.toggle("show", on);
+  if (text) $("busyText").textContent = text;
+}
+
+function slug(s) {
+  return s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "jurado";
+}
+
+// Texto com espaçamento entre letras (funciona em qualquer navegador)
+function spacedText(text, x, y, spacing) {
+  let cx = x;
+  for (const ch of text) {
+    ctx.fillText(ch, cx, y);
+    cx += ctx.measureText(ch).width + spacing;
+  }
+  return cx - spacing - x;
+}
+function spacedWidth(text, spacing) {
+  let w = 0;
+  for (const ch of text) w += ctx.measureText(ch).width + spacing;
+  return w - spacing;
+}
+
+function wrapLines(text, maxWidth) {
+  const words = text.split(/\s+/).filter(Boolean);
+  const lines = [];
+  let line = "";
+  for (const w of words) {
+    const test = line ? line + " " + w : w;
+    if (ctx.measureText(test).width > maxWidth && line) {
+      lines.push(line);
+      line = w;
+    } else line = test;
+  }
+  if (line) lines.push(line);
+  return lines;
+}
+
+/* --------------------------- template --------------------------- */
+// Faixa listrada (grafismo inspirado na identidade do Prêmio Aberje)
+function stripedShape(points, base, stripe, angle, gap, lineW) {
+  ctx.save();
+  ctx.beginPath();
+  points.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)));
+  ctx.closePath();
+  ctx.fillStyle = base;
+  ctx.fill();
+  ctx.clip();
+  ctx.strokeStyle = stripe;
+  ctx.lineWidth = lineW;
+  const xs = points.map((p) => p[0]), ys = points.map((p) => p[1]);
+  const cx = (Math.min(...xs) + Math.max(...xs)) / 2;
+  const cy = (Math.min(...ys) + Math.max(...ys)) / 2;
+  const r = Math.hypot(Math.max(...xs) - Math.min(...xs), Math.max(...ys) - Math.min(...ys));
+  ctx.translate(cx, cy);
+  ctx.rotate((angle * Math.PI) / 180);
+  ctx.beginPath();
+  for (let x = -r; x <= r; x += gap) {
+    ctx.moveTo(x, -r);
+    ctx.lineTo(x, r);
+  }
+  ctx.stroke();
+  ctx.restore();
+}
+
+function drawDefaultBackground() {
+  ctx.fillStyle = CONFIG.cores.fundo;
+  ctx.fillRect(0, 0, W, H);
+
+  // azul ao fundo, atrás da pessoa
+  stripedShape([[760, 330], [1080, 250], [1080, 760], [880, 720]], "#1b5f86", "#0d2b3e", 70, 13, 5);
+  stripedShape([[395, 690], [470, 640], [520, 760], [430, 800]], "#1b5f86", "#0d2b3e", 70, 13, 5);
+  // vermelho / laranja grande
+  stripedShape([[470, 250], [1080, 215], [1080, 300], [860, 560], [600, 640]], "#e2401c", "#f58a1f", 62, 15, 7);
+  stripedShape([[860, 560], [1080, 300], [1080, 470], [960, 610]], "#f26b1d", "#ffb21a", 62, 13, 5);
+  // faixas laranja horizontais
+  stripedShape([[300, 120], [1080, 70], [1080, 140], [320, 178]], "#f58a1f", "#ffc23d", 82, 11, 5);
+  stripedShape([[350, 200], [1080, 160], [1080, 218], [370, 245]], "#f58a1f", "#ffc23d", 82, 11, 5);
+  // verde no topo
+  stripedShape([[390, 0], [960, 0], [940, 70], [410, 92]], "#1a9447", "#e9d51e", 55, 13, 4);
+  // detalhe roxo à direita
+  stripedShape([[1040, 20], [1080, 10], [1080, 200], [1050, 210]], "#5b2a86", "#f26b1d", 80, 12, 4);
+}
+
+function drawDefaultLogo() {
+  const x = 58, top = 916;
+  ctx.fillStyle = "#fff";
+  ctx.textBaseline = "alphabetic";
+
+  ctx.font = "800 30px Montserrat";
+  const wPremio = spacedText("PRÊMIO", x + 10, top + 28, 10);
+
+  ctx.font = "800 40px Montserrat";
+  const wAberje = ctx.measureText("ABERJE").width;
+  const boxW = Math.max(wAberje + 24, wPremio + 20);
+  ctx.fillRect(x, top + 40, boxW, 48);
+  ctx.fillStyle = "#000";
+  ctx.fillText("ABERJE", x + (boxW - wAberje) / 2, top + 79);
+
+  ctx.fillStyle = "#fff";
+  ctx.font = "italic 800 30px Montserrat";
+  const ano = String(CONFIG.ano);
+  spacedText(ano, x + (boxW - spacedWidth(ano, 12)) / 2, top + 124, 12);
+
+  // troféu estilizado
+  const tx = x + boxW + 16;
+  ctx.strokeStyle = "#fff";
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  for (let i = 0; i < 5; i++) {
+    const bx = tx + 6 + i * 8;
+    ctx.moveTo(bx, top + 4 + (i % 2) * 8);
+    ctx.lineTo(bx + 4, top + 100);
+  }
+  ctx.moveTo(tx, top + 100); ctx.lineTo(tx + 52, top + 100);
+  ctx.lineTo(tx + 58, top + 128); ctx.lineTo(tx - 6, top + 128); ctx.closePath();
+  ctx.stroke();
+}
+
+function drawTexts() {
+  const { x, topo, larguraMax } = CONFIG.texto;
+  const nome = $("nome").value.trim() || "SEU NOME";
+  const cargo = $("cargo").value.trim();
+  const g = $("genero").value;
+  ctx.textBaseline = "alphabetic";
+  let y = topo;
+
+  // Nome: diminui a fonte até caber em no máximo 2 linhas
+  let size = 50, lines;
+  do {
+    ctx.font = `800 ${size}px Montserrat`;
+    lines = wrapLines(nome.toUpperCase(), larguraMax);
+    size -= 2;
+  } while ((lines.length > 2 || lines.some((l) => ctx.measureText(l).width > larguraMax)) && size > 26);
+  size += 2;
+  ctx.fillStyle = CONFIG.cores.texto;
+  for (const l of lines) {
+    y += size;
+    ctx.fillText(l, x, y);
+    y += size * 0.12;
+  }
+
+  // Cargo
+  if (cargo) {
+    ctx.font = "500 24px Montserrat";
+    ctx.fillStyle = CONFIG.cores.textoSecundario;
+    y += 14;
+    for (const l of wrapLines(cargo, larguraMax).slice(0, 3)) {
+      y += 30;
+      ctx.fillText(l, x, y);
+    }
+  }
+
+  // Linha laranja
+  y += 26;
+  ctx.fillStyle = CONFIG.cores.destaque;
+  ctx.fillRect(x, y, 300, 4);
+
+  // "Jurado da 52ª edição do Prêmio Aberje"
+  y += 18;
+  ctx.fillStyle = CONFIG.cores.texto;
+  ctx.font = "400 34px Montserrat";
+  y += 38; ctx.fillText(`Jurad${g} da`, x, y);
+  y += 44; ctx.fillText(`${CONFIG.edicao} edição do`, x, y);
+  ctx.font = "800 34px Montserrat";
+  y += 44; ctx.fillText("Prêmio Aberje", x, y);
+}
+
+function drawPerson() {
+  const p = state.person;
+  if (!p) return;
+  const s = state.baseScale * state.zoom;
+  const w = p.width * s, h = p.height * s;
+  const x = CONFIG.foto.centroX - w / 2 + state.offX;
+  const y = H - h + state.offY;
+  ctx.drawImage(p, x, y, w, h);
+}
+
+function render() {
+  ctx.clearRect(0, 0, W, H);
+  if (state.assets.fundo) ctx.drawImage(state.assets.fundo, 0, 0, W, H);
+  else drawDefaultBackground();
+  drawPerson();
+  if (state.assets.frente) ctx.drawImage(state.assets.frente, 0, 0, W, H);
+  drawTexts();
+  if (state.assets.logo) ctx.drawImage(state.assets.logo, 0, 0, W, H);
+  else drawDefaultLogo();
+  updateCaption();
+  updateDownloadState();
+}
+
+/* ---------------------- remoção de fundo ---------------------- */
+let segmenter = null; // Promise<{model, processor, RawImage}>
+
+function loadSegmenter() {
+  if (segmenter) return segmenter;
+  segmenter = (async () => {
+    const tf = await import(TRANSFORMERS_URL);
+    tf.env.allowLocalModels = false;
+    const files = {};
+    const progress_callback = (e) => {
+      if (e.status === "progress" && e.total) {
+        files[e.file] = [e.loaded, e.total];
+        const [l, t] = Object.values(files).reduce((a, [l, t]) => [a[0] + l, a[1] + t], [0, 0]);
+        if (pendingPhoto) setStatus("Preparando o recorte automático (só na primeira vez)…", "", (l / t) * 100);
+      }
+    };
+    const processor = await tf.AutoProcessor.from_pretrained(MODEL_ID, { progress_callback });
+    let model, device = "wasm";
+    if (navigator.gpu) {
+      try {
+        model = await tf.AutoModel.from_pretrained(MODEL_ID, { device: "webgpu", dtype: "fp32", progress_callback });
+        device = "webgpu";
+      } catch { model = null; }
+    }
+    if (!model) model = await tf.AutoModel.from_pretrained(MODEL_ID, { device: "wasm", dtype: "fp32", progress_callback });
+    return { tf, processor, model, device };
+  })();
+  segmenter.catch(() => (segmenter = null));
+  return segmenter;
+}
+
+async function computeMask(srcCanvas) {
+  let seg = await loadSegmenter();
+  const image = await seg.tf.RawImage.fromCanvas(srcCanvas);
+  const run = async (s) => {
+    const { pixel_values } = await s.processor(image);
+    const { output } = await s.model({ input: pixel_values });
+    return seg.tf.RawImage.fromTensor(output[0].mul(255).to("uint8")).resize(image.width, image.height);
+  };
+  try {
+    return await run(seg);
+  } catch (err) {
+    if (seg.device !== "webgpu") throw err;
+    // WebGPU falhou neste aparelho: recarrega em WASM
+    const model = await seg.tf.AutoModel.from_pretrained(MODEL_ID, { device: "wasm", dtype: "fp32" });
+    seg = { ...seg, model, device: "wasm" };
+    segmenter = Promise.resolve(seg);
+    return await run(seg);
+  }
+}
+
+function hasTransparency(c) {
+  const d = c.getContext("2d").getImageData(0, 0, c.width, c.height).data;
+  let transparent = 0;
+  for (let i = 3; i < d.length; i += 16) if (d[i] < 200) transparent++;
+  return transparent / (d.length / 16) > 0.05;
+}
+
+// Recorta o canvas no contorno da pessoa (pixels com alpha)
+function trimToContent(c) {
+  const { width: w, height: h } = c;
+  const d = c.getContext("2d").getImageData(0, 0, w, h).data;
+  let minX = w, minY = h, maxX = -1, maxY = -1;
+  for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
+      if (d[(y * w + x) * 4 + 3] > 40) {
+        if (x < minX) minX = x;
+        if (x > maxX) maxX = x;
+        if (y < minY) minY = y;
+        if (y > maxY) maxY = y;
+      }
+    }
+  }
+  if (maxX < 0) return c;
+  const out = document.createElement("canvas");
+  out.width = maxX - minX + 1;
+  out.height = maxY - minY + 1;
+  out.getContext("2d").drawImage(c, -minX, -minY);
+  return out;
+}
+
+function autoFit() {
+  const p = state.person;
+  const { alturaMax, larguraMax } = CONFIG.foto;
+  state.baseScale = Math.min(alturaMax / p.height, larguraMax / p.width);
+  state.zoom = 1; state.offX = 0; state.offY = 0;
+  $("zoom").value = 100;
+}
+
+let pendingPhoto = false;
+
+async function handleFile(file) {
+  if (!file || !file.type.startsWith("image/")) {
+    setStatus("Esse arquivo não é uma imagem. Envie um JPG ou PNG.", "err");
+    return;
+  }
+  const url = URL.createObjectURL(file);
+  let img;
+  try { img = await loadImage(url); }
+  catch {
+    setStatus("Não consegui abrir essa imagem. Tente salvar como JPG e enviar de novo.", "err");
+    return;
+  }
+  $("thumb").src = url; $("thumb").hidden = false;
+  $("dropTitle").textContent = "Trocar foto";
+  $("dropHint").textContent = file.name;
+
+  // Reduz fotos muito grandes para agilizar o processamento
+  const max = 1600;
+  const k = Math.min(1, max / Math.max(img.naturalWidth, img.naturalHeight));
+  const src = document.createElement("canvas");
+  src.width = Math.round(img.naturalWidth * k);
+  src.height = Math.round(img.naturalHeight * k);
+  src.getContext("2d", { willReadFrequently: true }).drawImage(img, 0, 0, src.width, src.height);
+
+  let cut = src;
+  if (!hasTransparency(src)) {
+    pendingPhoto = true;
+    setBusy(true, "Removendo o fundo da foto…");
+    setStatus("Removendo o fundo da foto…");
+    try {
+      const mask = await computeMask(src);
+      const sctx = src.getContext("2d");
+      const data = sctx.getImageData(0, 0, src.width, src.height);
+      const m = mask.data, ch = mask.channels;
+      for (let i = 0; i < src.width * src.height; i++) data.data[i * 4 + 3] = m[i * ch];
+      sctx.putImageData(data, 0, 0);
+      setStatus("Fundo removido! Ajuste o enquadramento se quiser.", "ok");
+    } catch (err) {
+      console.error(err);
+      setStatus("Não foi possível remover o fundo automaticamente (verifique sua conexão). Usaremos a foto inteira — se preferir, envie uma foto PNG já sem fundo.", "err");
+    } finally {
+      pendingPhoto = false;
+      setBusy(false);
+    }
+  } else {
+    setStatus("Foto sem fundo recebida! Ajuste o enquadramento se quiser.", "ok");
+  }
+
+  state.person = trimToContent(cut);
+  autoFit();
+  $("adjust").classList.add("show");
+  $("canvasWrap").classList.add("draggable");
+  render();
+}
+
+/* --------------------------- interface --------------------------- */
+function updateDownloadState() {
+  const ok = !!state.person && $("nome").value.trim().length > 1;
+  $("download").disabled = !ok;
+  $("downloadHint").textContent = ok
+    ? "Arte em 1080 × 1080 px, pronta para Instagram, LinkedIn e Facebook."
+    : "Envie sua foto e preencha o nome para liberar o download.";
+}
+
+function updateCaption() {
+  $("legenda").value = CONFIG.legenda();
+}
+
+const drop = $("drop");
+$("file").addEventListener("change", (e) => handleFile(e.target.files[0]));
+["dragenter", "dragover"].forEach((ev) =>
+  drop.addEventListener(ev, (e) => { e.preventDefault(); drop.classList.add("over"); }));
+["dragleave", "drop"].forEach((ev) =>
+  drop.addEventListener(ev, (e) => { e.preventDefault(); drop.classList.remove("over"); }));
+drop.addEventListener("drop", (e) => handleFile(e.dataTransfer.files[0]));
+
+["nome", "cargo", "genero"].forEach((id) => $(id).addEventListener("input", render));
+
+$("zoom").addEventListener("input", (e) => { state.zoom = e.target.value / 100; render(); });
+$("reset").addEventListener("click", () => { autoFit(); render(); });
+
+// Arrastar a foto direto no card
+let drag = null;
+canvas.addEventListener("pointerdown", (e) => {
+  if (!state.person) return;
+  canvas.setPointerCapture(e.pointerId);
+  drag = { x: e.clientX, y: e.clientY, offX: state.offX, offY: state.offY };
+  $("canvasWrap").classList.add("dragging");
+});
+canvas.addEventListener("pointermove", (e) => {
+  if (!drag) return;
+  const k = W / canvas.getBoundingClientRect().width;
+  state.offX = drag.offX + (e.clientX - drag.x) * k;
+  state.offY = drag.offY + (e.clientY - drag.y) * k;
+  render();
+});
+const endDrag = () => { drag = null; $("canvasWrap").classList.remove("dragging"); };
+canvas.addEventListener("pointerup", endDrag);
+canvas.addEventListener("pointercancel", endDrag);
+canvas.addEventListener("wheel", (e) => {
+  if (!state.person) return;
+  e.preventDefault();
+  const z = Math.min(200, Math.max(50, Number($("zoom").value) - Math.sign(e.deltaY) * 4));
+  $("zoom").value = z; state.zoom = z / 100; render();
+}, { passive: false });
+
+$("download").addEventListener("click", () => {
+  canvas.toBlob((blob) => {
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = `premio-aberje-${CONFIG.ano}-${slug($("nome").value)}.png`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+  }, "image/png");
+});
+
+$("copy").addEventListener("click", async () => {
+  try { await navigator.clipboard.writeText($("legenda").value); }
+  catch { $("legenda").select(); document.execCommand("copy"); }
+  $("copy").textContent = "Legenda copiada ✓";
+  setTimeout(() => ($("copy").textContent = "Copiar legenda"), 2000);
+});
+
+/* ------------------------------ init ------------------------------ */
+(async () => {
+  await Promise.all([
+    document.fonts.load("800 50px Montserrat"),
+    document.fonts.load("400 34px Montserrat"),
+    document.fonts.load("500 24px Montserrat"),
+    document.fonts.load("italic 800 30px Montserrat"),
+  ]).catch(() => {});
+  for (const key of ["fundo", "frente", "logo"]) {
+    const path = CONFIG.arte[key];
+    if (path) state.assets[key] = await loadImage(path).catch(() => null);
+  }
+  render();
+  // Já começa a baixar o modelo de recorte em segundo plano
+  loadSegmenter().catch(() => {});
+})();
+</script>
+</body>
+</html>

@@ -1,7 +1,9 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
-const PUBLIC_PATHS = ["/login", "/auth/callback", "/api/webhooks/hotmart"];
+// /aberje e /aberje-jurados: gerador de card dos jurados do Prêmio Aberje
+// (página estática, aberta ao público, sem login)
+const PUBLIC_PATHS = ["/login", "/auth/callback", "/api/webhooks/hotmart", "/aberje"];
 
 export async function proxy(request: NextRequest) {
   let response = NextResponse.next({ request });
