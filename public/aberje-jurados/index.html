@@ -32,7 +32,10 @@
     border-bottom: 1px solid var(--line);
     padding: 20px 16px;
   }
-  header .wrap { display: flex; align-items: center; gap: 14px; }
+  header .wrap { display: flex; align-items: center; gap: 20px; }
+  header .logo { height: 64px; width: auto; display: block; }
+  header h1 { padding-left: 20px; border-left: 1px solid var(--line); }
+  @media (max-width: 520px) { header .logo { height: 48px; } header h1 { font-size: 16px; } }
   header .tag {
     font-size: 11px; font-weight: 800; letter-spacing: .25em; text-transform: uppercase;
     color: var(--accent);
@@ -133,10 +136,8 @@
 <body>
 <header>
   <div class="wrap">
-    <div>
-      <div class="tag">Prêmio Aberje 2026</div>
-      <h1>Monte o seu card de jurado</h1>
-    </div>
+    <img class="logo" src="logo.svg" alt="Prêmio Aberje 2026" />
+    <h1>Monte o seu card de jurado</h1>
   </div>
 </header>
 
