@@ -587,11 +587,24 @@ canvas.addEventListener("wheel", (e) => {
   $("zoom").value = z; state.zoom = z / 100; render();
 }, { passive: false });
 
+// Dentro do claude.ai o download passa pelo capability "downloads";
+// hospedado em qualquer outro lugar, usa o link de download normal.
+const downloadsCap = window.claude?.use ? window.claude.use("downloads").catch(() => null) : Promise.resolve(null);
+
 $("download").addEventListener("click", () => {
-  canvas.toBlob((blob) => {
+  const filename = `premio-aberje-${CONFIG.ano}-${slug($("nome").value)}.png`;
+  canvas.toBlob(async (blob) => {
+    const downloads = await downloadsCap;
+    if (downloads) {
+      try { await downloads.save({ filename, data: blob }); }
+      catch (err) {
+        if (err?.code !== "declined") $("downloadHint").textContent = "Não foi possível baixar agora. Tente de novo em instantes.";
+      }
+      return;
+    }
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
-    a.download = `premio-aberje-${CONFIG.ano}-${slug($("nome").value)}.png`;
+    a.download = filename;
     document.body.appendChild(a);
     a.click();
     a.remove();
