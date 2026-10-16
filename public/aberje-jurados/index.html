@@ -246,8 +246,6 @@
     <div class="row modal-actions">
       <button type="button" id="saveShare" hidden>Salvar / compartilhar</button>
       <button type="button" id="saveCopy">Copiar imagem</button>
-      <button type="button" id="saveTab">Abrir em nova aba</button>
-      <button type="button" id="saveFile">Baixar arquivo</button>
       <button type="button" id="saveClose">Fechar</button>
     </div>
     <p class="modal-msg" id="saveMsg"></p>
@@ -682,11 +680,9 @@ canvas.addEventListener("wheel", (e) => {
 
 // Dentro do claude.ai, downloads de artefato só são liberados para membros
 // da organização. Por isso lá o card abre como imagem numa janela, para
-// salvar com o botão direito (ou tocar e segurar no celular), e o botão
-// "Baixar arquivo" tenta o download oficial. Hospedado em qualquer outro
-// lugar, o download é direto.
+// salvar com o botão direito (ou tocar e segurar no celular) ou copiar.
+// Hospedado em qualquer outro lugar, o download é direto.
 const inClaude = !!window.claude?.use;
-const downloadsCap = inClaude ? window.claude.use("downloads").catch(() => null) : Promise.resolve(null);
 const cardFilename = () => `premio-aberje-${CONFIG.ano}-${slug($("nome").value)}.png`;
 
 function directDownload(blob, filename) {
@@ -709,22 +705,6 @@ $("download").addEventListener("click", () => {
   $("saveModal").hidden = false;
 });
 
-$("saveFile").addEventListener("click", () => {
-  canvas.toBlob(async (blob) => {
-    const downloads = await downloadsCap;
-    if (!downloads) {
-      $("saveMsg").textContent = "Download de arquivo indisponível aqui — salve a imagem acima (botão direito › Salvar imagem como).";
-      return;
-    }
-    try {
-      await downloads.save({ filename: cardFilename(), data: blob });
-      $("saveMsg").textContent = "Pronto! Card baixado.";
-    } catch (err) {
-      if (err?.code !== "declined")
-        $("saveMsg").textContent = "Download de arquivo indisponível aqui — salve a imagem acima (botão direito › Salvar imagem como).";
-    }
-  }, "image/png");
-});
 // Alternativas para quem não pode usar o download do claude.ai
 const cardBlob = () => new Promise((r) => canvas.toBlob(r, "image/png"));
 const saveFail = "Não funcionou aqui — use o botão direito (ou toque e segure) na imagem acima.";
@@ -745,11 +725,6 @@ $("saveCopy").addEventListener("click", async () => {
     await navigator.clipboard.write([new ClipboardItem({ "image/png": cardBlob() })]);
     $("saveMsg").textContent = "Imagem copiada! Cole (Ctrl+V) no post, no WhatsApp ou num documento.";
   } catch { $("saveMsg").textContent = saveFail; }
-});
-$("saveTab").addEventListener("click", async () => {
-  const url = URL.createObjectURL(await cardBlob());
-  const w = window.open(url, "_blank");
-  if (!w) $("saveMsg").textContent = saveFail;
 });
 const closeSave = () => ($("saveModal").hidden = true);
 $("saveClose").addEventListener("click", closeSave);
