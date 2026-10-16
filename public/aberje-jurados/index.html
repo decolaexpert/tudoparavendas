@@ -117,6 +117,21 @@
   .canvas-wrap canvas { width: 100%; height: 100%; display: block; touch-action: none; }
   .canvas-wrap.draggable canvas { cursor: grab; }
   .canvas-wrap.dragging canvas { cursor: grabbing; }
+  .modal {
+    position: fixed; inset: 0; z-index: 50; display: flex; align-items: center; justify-content: center;
+    background: rgba(0,0,0,.8); padding: 16px;
+  }
+  .modal[hidden] { display: none; }
+  .modal-box {
+    background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 18px;
+    width: min(440px, 100%); max-height: 100%; overflow: auto; text-align: center;
+  }
+  .modal-title { margin: 0 0 12px; font-size: 16px; font-weight: 800; }
+  .modal-box img { width: 100%; height: auto; border-radius: 10px; display: block; }
+  .modal-how { font-size: 12px; line-height: 1.6; color: var(--muted); margin: 12px 0 0; }
+  .modal-how b { color: var(--text); }
+  .modal-actions { justify-content: center; }
+  .modal-msg { font-size: 12px; color: var(--accent-2); margin: 10px 0 0; min-height: 1em; }
   .sample-tag {
     position: absolute; top: 12px; left: 50%; transform: translateX(-50%); white-space: nowrap;
     background: rgba(0,0,0,.7); border: 1px solid rgba(255,255,255,.2); border-radius: 99px;
@@ -221,6 +236,19 @@
     </section>
   </div>
 </main>
+
+<div class="modal" id="saveModal" hidden>
+  <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="saveTitle">
+    <p class="modal-title" id="saveTitle">Seu card está pronto! 🎉</p>
+    <img id="saveImg" alt="Seu card do Prêmio Aberje 2026" />
+    <p class="modal-how"><b>No computador:</b> clique com o botão direito na imagem › <b>Salvar imagem como…</b><br /><b>No celular:</b> toque e segure a imagem › <b>Salvar imagem</b></p>
+    <div class="row modal-actions">
+      <button type="button" id="saveFile">Baixar arquivo</button>
+      <button type="button" id="saveClose">Fechar</button>
+    </div>
+    <p class="modal-msg" id="saveMsg"></p>
+  </div>
+</div>
 
 <footer class="credit">Desenvolvido por <a href="https://instagram.com/diegofavero" target="_blank" rel="noopener">@diegofavero</a></footer>
 
@@ -648,30 +676,55 @@ canvas.addEventListener("wheel", (e) => {
   $("zoom").value = z; state.zoom = z / 100; render();
 }, { passive: false });
 
-// Dentro do claude.ai o download passa pelo capability "downloads";
-// hospedado em qualquer outro lugar, usa o link de download normal.
-const downloadsCap = window.claude?.use ? window.claude.use("downloads").catch(() => null) : Promise.resolve(null);
+// Dentro do claude.ai, downloads de artefato só são liberados para membros
+// da organização. Por isso lá o card abre como imagem numa janela, para
+// salvar com o botão direito (ou tocar e segurar no celular), e o botão
+// "Baixar arquivo" tenta o download oficial. Hospedado em qualquer outro
+// lugar, o download é direto.
+const inClaude = !!window.claude?.use;
+const downloadsCap = inClaude ? window.claude.use("downloads").catch(() => null) : Promise.resolve(null);
+const cardFilename = () => `premio-aberje-${CONFIG.ano}-${slug($("nome").value)}.png`;
+
+function directDownload(blob, filename) {
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+}
 
 $("download").addEventListener("click", () => {
-  const filename = `premio-aberje-${CONFIG.ano}-${slug($("nome").value)}.png`;
+  if (!inClaude) {
+    canvas.toBlob((blob) => directDownload(blob, cardFilename()), "image/png");
+    return;
+  }
+  $("saveImg").src = canvas.toDataURL("image/png");
+  $("saveMsg").textContent = "";
+  $("saveModal").hidden = false;
+});
+
+$("saveFile").addEventListener("click", () => {
   canvas.toBlob(async (blob) => {
     const downloads = await downloadsCap;
-    if (downloads) {
-      try { await downloads.save({ filename, data: blob }); }
-      catch (err) {
-        if (err?.code !== "declined") $("downloadHint").textContent = "Não foi possível baixar agora. Tente de novo em instantes.";
-      }
+    if (!downloads) {
+      $("saveMsg").textContent = "Download de arquivo indisponível aqui — salve a imagem acima (botão direito › Salvar imagem como).";
       return;
     }
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+    try {
+      await downloads.save({ filename: cardFilename(), data: blob });
+      $("saveMsg").textContent = "Pronto! Card baixado.";
+    } catch (err) {
+      if (err?.code !== "declined")
+        $("saveMsg").textContent = "Download de arquivo indisponível aqui — salve a imagem acima (botão direito › Salvar imagem como).";
+    }
   }, "image/png");
 });
+const closeSave = () => ($("saveModal").hidden = true);
+$("saveClose").addEventListener("click", closeSave);
+$("saveModal").addEventListener("click", (e) => { if (e.target === $("saveModal")) closeSave(); });
+document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeSave(); });
 
 $("copy").addEventListener("click", async () => {
   try { await navigator.clipboard.writeText($("legenda").value); }
