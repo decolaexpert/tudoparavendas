@@ -131,6 +131,7 @@
   .modal-how { font-size: 12px; line-height: 1.6; color: var(--muted); margin: 12px 0 0; }
   .modal-how b { color: var(--text); }
   .modal-actions { justify-content: center; }
+  .modal-actions button[hidden] { display: none; }
   .modal-msg { font-size: 12px; color: var(--accent-2); margin: 10px 0 0; min-height: 1em; }
   .sample-tag {
     position: absolute; top: 12px; left: 50%; transform: translateX(-50%); white-space: nowrap;
@@ -243,6 +244,9 @@
     <img id="saveImg" alt="Seu card do Prêmio Aberje 2026" />
     <p class="modal-how"><b>No computador:</b> clique com o botão direito na imagem › <b>Salvar imagem como…</b><br /><b>No celular:</b> toque e segure a imagem › <b>Salvar imagem</b></p>
     <div class="row modal-actions">
+      <button type="button" id="saveShare" hidden>Salvar / compartilhar</button>
+      <button type="button" id="saveCopy">Copiar imagem</button>
+      <button type="button" id="saveTab">Abrir em nova aba</button>
       <button type="button" id="saveFile">Baixar arquivo</button>
       <button type="button" id="saveClose">Fechar</button>
     </div>
@@ -720,6 +724,32 @@ $("saveFile").addEventListener("click", () => {
         $("saveMsg").textContent = "Download de arquivo indisponível aqui — salve a imagem acima (botão direito › Salvar imagem como).";
     }
   }, "image/png");
+});
+// Alternativas para quem não pode usar o download do claude.ai
+const cardBlob = () => new Promise((r) => canvas.toBlob(r, "image/png"));
+const saveFail = "Não funcionou aqui — use o botão direito (ou toque e segure) na imagem acima.";
+try {
+  const probe = new File([new Uint8Array(1)], "x.png", { type: "image/png" });
+  if (navigator.canShare?.({ files: [probe] })) $("saveShare").hidden = false;
+} catch {}
+$("saveShare").addEventListener("click", async () => {
+  try {
+    const file = new File([await cardBlob()], cardFilename(), { type: "image/png" });
+    await navigator.share({ files: [file], title: `Prêmio Aberje ${CONFIG.ano}` });
+  } catch (err) {
+    if (err?.name !== "AbortError") $("saveMsg").textContent = saveFail;
+  }
+});
+$("saveCopy").addEventListener("click", async () => {
+  try {
+    await navigator.clipboard.write([new ClipboardItem({ "image/png": cardBlob() })]);
+    $("saveMsg").textContent = "Imagem copiada! Cole (Ctrl+V) no post, no WhatsApp ou num documento.";
+  } catch { $("saveMsg").textContent = saveFail; }
+});
+$("saveTab").addEventListener("click", async () => {
+  const url = URL.createObjectURL(await cardBlob());
+  const w = window.open(url, "_blank");
+  if (!w) $("saveMsg").textContent = saveFail;
 });
 const closeSave = () => ($("saveModal").hidden = true);
 $("saveClose").addEventListener("click", closeSave);
