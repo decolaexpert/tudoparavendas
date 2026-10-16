@@ -209,6 +209,7 @@
         </div>
         <p class="hint">Arraste a foto no card para reposicionar.</p>
         <div class="row">
+          <button type="button" id="flip">⇆ Espelhar foto</button>
           <button type="button" id="reset">Centralizar de novo</button>
         </div>
       </div>
@@ -437,7 +438,13 @@ function drawPerson() {
   const w = p.width * s, h = p.height * s;
   const x = CONFIG.foto.centroX - w / 2 + state.offX;
   const y = H - h + state.offY;
-  ctx.drawImage(p, x, y, w, h);
+  if (!state.flip) return ctx.drawImage(p, x, y, w, h);
+  // espelha na horizontal em torno do centro da foto
+  ctx.save();
+  ctx.translate(x + w / 2, 0);
+  ctx.scale(-1, 1);
+  ctx.drawImage(p, -w / 2, y, w, h);
+  ctx.restore();
 }
 
 function drawLogo() {
@@ -620,6 +627,7 @@ async function handleFile(file) {
 
   state.person = trimToContent(cut);
   state.example = false;
+  state.flip = false;
   $("sampleTag").hidden = true;
   autoFit();
   $("adjust").classList.add("show");
@@ -652,6 +660,7 @@ drop.addEventListener("drop", (e) => handleFile(e.dataTransfer.files[0]));
 
 $("zoom").addEventListener("input", (e) => { state.zoom = e.target.value / 100; render(); });
 $("reset").addEventListener("click", () => { autoFit(); render(); });
+$("flip").addEventListener("click", () => { state.flip = !state.flip; render(); });
 
 // Arrastar a foto direto no card
 let drag = null;
